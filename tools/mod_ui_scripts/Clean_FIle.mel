@@ -1,0 +1,152 @@
+global proc CleenFilewin()
+{
+    if (`windowPref -ex clnfilewin`==1) windowPref -r clnfilewin;  
+    if(`window -q -ex clnfilewin`) deleteUI clnfilewin;
+    window -w 200 -h 100 -s 0 -mxb 0 -mnb 1 -mb 1 -tlb 1  -tbm 1  -t "Clean Mod File" clnfilewin; 
+    rowColumnLayout -nc 1 -cw 1 200;
+    checkBox -label "Lights" -v 1 LightCheck;
+    checkBox -label "Cameras" -v 1 CameraCheck;
+    checkBox -label "RenderLayers" -v 1 RenderCheck;
+    checkBox -label "DisplayLayers" -v 1 DisplayCheck;
+    checkBox -label "Bookmarks" -v 1 Bookmarks;
+    checkBox -label "Unknown Nodes" -v 1 UnknownNodes;
+    button -label "Clean" -c CleanFile;
+    separator -style "in";
+    text -w 200  -label  "@Developed by Anonymous";
+    showWindow; 
+}
+
+
+
+global proc CleanFile(){
+    string $lights[] = `ls -type "light"`;
+    string $cameras[] = `ls -type "camera"`;
+    string $renderLayer[] = `ls -type "renderLayer"`;
+    string $displayLayer[] = `ls -type "displayLayer"`;
+     
+     int $lightValue = `checkBox -q -v LightCheck`;
+     int $cameraValue = `checkBox -q -v CameraCheck`;
+     int $renderValue = `checkBox -q -v RenderCheck`;
+     int $layerValue = `checkBox -q -v DisplayCheck`;
+     int $bookmarks = `checkBox -q -v Bookmarks`;
+     int $unknownnodes = `checkBox -q -v UnknownNodes`;
+     
+      if($lightValue==1){ 
+          for($l in $lights){
+              select $l;
+              pickWalk -d up;
+              doDelete;
+          }
+      }
+
+       if($cameraValue==1){
+           for($c in $cameras){
+               if(($c=="perspShape")||($c=="topShape")||($c=="sideShape")||($c=="frontShape")){
+               continue;
+               }
+               else{
+               select $c;
+               pickWalk -d up;
+               doDelete;
+               }
+           }
+       }
+       if($renderValue==1){
+          editRenderLayerGlobals -crl defaultRenderLayer;
+           for($r in $renderLayer){
+               if($r=="defaultRenderLayer"){
+               continue;
+               }
+               else{
+                 delete $r;
+                 }
+           }
+       } 
+       
+       if($layerValue==1){
+           for($d in $displayLayer){
+               if($d=="defaultLayer"){
+                   continue;
+               }
+               else{
+               delete $d;
+               }
+           }
+       }
+       
+       if($bookmarks==1)
+       {
+            delete_objects("*cameraView*");
+            //delete_objects("bindPose*");
+       }
+       
+        if($unknownnodes==1)
+       {
+            delete_unknown();
+       }
+       confirmDialog -icn "information" -ma "center" -title "File Clean up Done" 
+       -message "File Clean up Done."
+    	-button "Ok" -defaultButton "Yes";
+	   
+	   
+       print "File Cleaned !";
+}
+
+
+global proc delete_objects(string $objname)
+{
+select -cl;
+catchQuiet(`select ($objname)`);
+string $cameraviewobjects[] = `ls -sl`;
+int $totalobj = size($cameraviewobjects);
+if ($totalobj > 0)
+{
+	int $i;
+	for($i=0;$i<$totalobj;$i++)
+	{
+		catchQuiet(`delete $cameraviewobjects[$i]`);
+	}
+  }
+}
+
+global proc delete_unknown()
+{
+  string $sets[]=`ls -type objectSet`;
+  int $k;
+  for($k=0;$k<size($sets);$k++)
+  {
+    string $connections[]=`listConnections -c 1 -p 1 $sets[$k]`;
+    for($c in $connections)
+    {
+    if(`gmatch $c "*dagSetMembers*"`)
+      {
+        //print($sets[$k]+"\n");
+        break;
+      }
+    }
+  }
+  int $i;
+    string $unobjs[]=`ls -type unknown -type unknownDag -type unknownTransform`;
+    for($i=0;$i<size($unobjs);$i++)
+    {
+        delete $unobjs[$i];
+    }
+    
+    string $getPolyNormal[] = `ls -long -type "polyNormal"`;
+    for($i=0;$i<size($getPolyNormal);$i++)
+    {
+        delete $getPolyNormal[$i];
+    }
+    
+    string $getBrush[] = `ls -long -type "brush"`;
+    for($i=0;$i<size($getBrush);$i++)
+    {
+        delete $getBrush[$i];
+    }
+    delete_objects("*cameraView*");
+    delete_objects("bindPose*");
+    delete_objects("*uiConfigurationScriptNode*");
+    delete_objects("*defaultViewColorManager*");
+   
+}
+

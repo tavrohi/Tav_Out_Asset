@@ -1,0 +1,794 @@
+
+/*
+ * cometRename() - Main UI entry.
+ */
+global proc cometRename()
+{
+    if (`windowPref -ex RenameWin`==1) windowPref -r RenameWin; 
+    if(`window -q -ex RenameWin`) deleteUI RenameWin;
+    window  -w 150 -h 70 -s 0  -mnb 1 -mb 1 -i 0  -t "Rename Script" RenameWin;
+  columnLayout  -adjustableColumn true;
+
+  separator -style "in" -w 300 -h 8;
+
+  rowColumnLayout -nc 2 -cw 1 50 -cw 2 250;
+      text -l "Search: " -al "right";
+      textField -tx "" tfSearch;
+      setParent "..";
+  rowColumnLayout -nc 2 -cw 1 50 -cw 2 250;
+      text -l "Replace: " -al "right";
+      textField -tx "" tfReplace;
+      setParent "..";
+  separator -style "none" -w 300 -h 4;
+  radioButtonGrp -numberOfRadioButtons 3 -label "" -sl 1 -labelArray3 "Hierarchy" "Selected" "All" -columnWidth 1 30 SearchAndReplace;
+  button   -l "Search And Replace" -al "center" -w 300 -c ("cR_doRename(0);") -ann "Searches for Search text and replaecs with Replace text.  Replace CAN be blank to remove text, or CAN be a part of or contain search string in it." butSearchReplace;
+
+  separator -style "none" -w 300 -h 10;
+  separator -style "in" -w 300 -h 8;
+
+  rowColumnLayout -nc 2 -cw 1 50 -cw 2 250;
+      text -l "Prefix: " -al "right";
+      textField -tx "" tfPrefix;
+      setParent "..";
+  separator -style "none" -w 300 -h 4;
+  button   -l "Add Prefix" -al "center" -w 300 -c ("cR_doRename(1);") -ann "Adds prefix text in before current name of each object" butPrefix;
+
+
+  separator -style "none" -w 300 -h 10;
+  separator -style "in" -w 300 -h 8;
+
+  rowColumnLayout -nc 2 -cw 1 50 -cw 2 250;
+      text -l "Suffix: " -al "right";
+      textField -tx "" tfSuffix;
+      setParent "..";
+  separator -style "none" -w 300 -h 4;
+  button  -l "Add Suffix" -al "center" -w 300 -c ("cR_doRename(2);") -ann "Adds suffix text in after current name of each object" butSuffix;
+
+  separator -style "none" -w 300 -h 10;
+  separator -style "in" -w 300 -h 8;
+
+  rowColumnLayout -nc 3 -cw 1 50 -cw 2 100 -cw 3 150;
+      text -l "Rename: " -al "right";
+      textField -tx "" tfRename;
+      radioButtonGrp   -numberOfRadioButtons 3 -cw3 50 50 50 -labelArray3 "123..." "abc..." "ABC..." -cc winchange  -sl 1 rnmtyp;
+      setParent "..";
+  
+  rowColumnLayout -nc 2 -cw 1 50 -cw 2 60;
+      text -l "Start #: " -al "right" ifNumber;
+      intField -v 1 -w 60 -min 0 ifNumber;
+      setParent "..";
+  rowColumnLayout -nc 2 -cw 1 50 -cw 2 60;
+      text -l "Padding: " -al "right" ifPadding;
+      intField -v 0 -w 60 -min 0 ifPadding;
+      setParent "..";
+  separator -style "none" -w 300 -h 4;
+
+  button   -l "Rename And Number" -al "center" -w 300 -c ("cR_doRename(3);") 
+  -ann "Renames each object with the base rename text, then adds a number after each, with the specfied number of zero padding in front of the number" butRenameNumber;
+  
+  
+   separator -style "in" -w 300 -h 8;
+  rowColumnLayout -numberOfColumns 3 -cs 1 10 -cs 3 4 -columnWidth 1 107 -columnWidth 2 92 -columnWidth 3 93;
+        text -label "Remove..." -align "left";
+        button -l "First Character" -c "remove_FirstChr()";
+        button -l "Last Character" -c "remove_LastChr()";
+  setParent..;
+      
+  text -l "" -h 4;
+      
+  rowColumnLayout -numberOfColumns 2 -cs 1 10 -columnWidth 1 107 -columnWidth 2 189;
+        text -label "Rename Shapes..." -align "left";
+        button  -l "Apply" -c "renameSelectedShape(); renameSelectedShape()";
+      setParent..;
+
+
+  separator -style "in" -w 300 -h 8;
+  
+  rowColumnLayout -nc 3 -cw 1 160 -cw 2 70 -cw 3 70;
+      text -l "Add \"_geo\" Suffix to Polygons: " -al "right";
+      button -l "Selected" -al "center" -w 50 -c "selsuffix(\"_geo\")";
+      button -l "All Geo" -al "center" -w 50 -c ("geoall();");
+  setParent "..";
+  rowColumnLayout -nc 3 -cw 1 160 -cw 2 70 -cw 3 70;
+      text -l "Add \"_grp\" Suffix to groups:  " -al "right";
+      button -l "Selected" -al "center" -w 50 -c "selsuffix(\"_grp\")";
+      button -l "All Grp" -al "center" -w 50 -c ("allgrp");
+  setParent "..";
+
+  rowColumnLayout -nc 3 -cw 1 160 -cw 2 70 -cw 3 70;
+      text -l "Add \"_mat\" Suffix to Material:  " -al "right";
+      button -l "Selected" -al "center" -w 50 -c "selsuffix(\"_mat\")";
+      button -l "All Mat" -al "center" -w 50 -c ("allmat");
+  setParent "..";
+  
+  
+  separator -style "in" -w 300 -h 8;
+  
+    text   -al "center" -label "Script By Anonymous ";
+  separator -style "in" -w 300 -h 8;
+
+
+  showWindow RenameWin;
+}
+
+global proc winchange()
+{
+    if (`radioButtonGrp -q -select rnmtyp` == 1)
+    {
+        text -e -vis 1 ifNumber;
+        text -e -vis 1 ifPadding;
+        intField -e -vis 1 ifNumber;
+        intField -e -vis 1 ifPadding;
+    }
+    
+    if (`radioButtonGrp -q -select rnmtyp` == 2 || `radioButtonGrp -q -select rnmtyp` == 3)
+    {
+        text -e -vis 0 ifNumber;
+        text -e -vis 0 ifPadding;
+        intField -e -vis 0 ifNumber;
+        intField -e -vis 0 ifPadding;
+    }
+}
+
+
+
+proc string stringReplace(string $str, string $search, string $replace)
+{
+    string $retstr = "";
+    // Sanity check please!
+    if ($search == "")
+        return $str;
+    
+    if ($str == "")
+        return $str;
+        
+        
+    int $len = size($str);
+    int $lenS = size($search);
+    
+    int $i, $j;
+    int $match;
+    
+    for ($i=1; $i <= $len; ++$i)
+        {
+  $match = 0;
+
+  // Now get substring from where we are currently
+  // to the number of letters past of the length
+  // of the search string.  Basically the same
+  // length as the search string.  So if it is identical
+  // we know we have a match.
+  //
+  // If not, we don't.  We also make sure we aren't
+  // trying to look past the end of the string...
+  //
+  $j = $i + ($lenS - 1);
+
+  if ($j <= $len)
+      {
+      string $part = `substring $str $i $j`;
+      if ($part == $search)
+          $match = 1;
+      }
+  
+  if ($match == 1)
+      {
+      $retstr += $replace; // we did it, so insert replace str
+      $i = $j;  // skip forward
+      }
+  else
+      {
+      string $char = `substring $str $i $i`;
+      $retstr += $char;
+      }
+  }
+
+    return $retstr;
+  
+}
+
+// --------------------------------------------------------------------------
+
+/*
+ * getShortName() - Given a string, get last part after last | pipe.
+ */
+proc string getShortName(string $obj)
+{
+    string $ret = "";
+    
+    if ($obj == "")
+        return $ret;
+        
+    string $parts[];
+    int $cnt = tokenize($obj, "|", $parts);
+    
+    if ($cnt <= 0)
+        $ret = $obj;
+    else
+        $ret = $parts[($cnt-1)];
+    
+    return $ret;
+}
+
+// --------------------------------------------------------------------------
+
+/*
+ * chop() - Removes last char
+ */
+proc string chop(string $str)
+{
+    string $ret = "";
+    int $cnt = size($str);
+    if ($cnt <= 1)
+        return $ret;
+    $ret = `substring $str 1 ($cnt-1)`;
+    return $ret;
+}
+
+// --------------------------------------------------------------------------
+
+/*
+ * cR_doRename() - Does real work of renaming selected objects
+ *
+ *    $mode:  0=S&R 1=Pre 2=Suf 3=R&N
+ */
+global proc cR_doRename(int $mode)
+{
+  string $objs[] = `ls -sl -long`;
+  if ($mode == 0 ||$mode == 1 || $mode == 2)
+  {
+  select  $objs;
+  select -hierarchy;
+  $objs = `ls -sl -long`;
+  }
+
+    int $objCnt = size($objs);
+    int $i;
+
+  // Get all UI data...
+  //
+   string $search = `textField -q -tx tfSearch`;
+   string $replace = `textField -q -tx tfReplace`;
+   string $prefix = `textField -q -tx tfPrefix`;
+   string $suffix = `textField -q -tx tfSuffix`;
+   string $rename = `textField -q -tx tfRename`;
+   int $start = `intField -q -v ifNumber`;
+   int $padding = `intField -q -v ifPadding`;
+   string $options = `radioButtonGrp -q -sl SearchAndReplace`;
+    
+   string $shortName;
+   string $newShortName;
+   string $newName;
+   
+   
+   // asign all letters in arrey
+    string $upper[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    string $lower[] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+    int $k=26;
+    for ($i = 0; $i < 26; $i++)
+        {
+           if ($k>=26 && $k<=676)
+           {
+               for ($j = 0; $j <26; $j++)
+               {
+                    //print  ($k + "a\n"); 
+                    $lower[$k] = $lower[$i] + $lower[$j];
+                    $k++;
+               }
+           }
+           if ($k>=677 && $k<17576)
+           {
+               for ($a = 0; $a < 26; $a++)
+               {
+                   for ($j = 0; $j < 26; $j++)
+                   {
+                        for ($l = 0; $l < 26; $l++)
+                        {    
+                             // print  ($k + "b\n");               
+                             $lower[$k] = $lower[$a] + $lower[$j] + $lower[$l];
+                             $k++;
+                       }
+                   }
+               }
+           }
+        }
+   
+    $k=26;    
+    for ($i = 0; $i < 26; $i++)
+        {
+           if ($k>=26 && $k<=676)
+           {
+               for ($j = 0; $j <26; $j++)
+               {
+                    $upper[$k] = $upper[$i] + $upper[$j];
+                    $k++;
+               }
+           }
+           if ($k>=677 && $k<17576)
+           {
+               for ($a = 0; $a < 26; $a++)
+               {
+                   for ($j = 0; $j < 26; $j++)
+                   {
+                        for ($l = 0; $l < 26; $l++)
+                        {    
+                             // print  ($k + "b\n");               
+                             $upper[$k] = $upper[$a] + $upper[$j] + $upper[$l];
+                             $k++;
+                       }
+                   }
+               }
+           }
+        }
+  
+
+  // Now do it
+  //
+  for ($i=0; $i < $objCnt; ++$i)
+  {
+  $obj = $objs[$i];
+  $shortName = getShortName($obj);
+  switch ($mode)
+      {
+      case 0:
+          if ($search == "")
+              {
+              warning -sl 0 ("Can't search and replace, search entry field is blank!");
+              return;
+              }
+          if ($options == 1)
+          {
+              searchReplaceNames $search $replace "hierarchy";
+          }
+          
+          else if ($options == 2)
+          {
+              searchReplaceNames $search $replace "selected";
+          }
+          
+          else if ($options == 3)
+          {
+              searchReplaceNames $search $replace "all";
+          }
+          return;
+          break;
+
+      case 1:
+          if ($prefix == "")
+              {
+              warning -sl 0 ("Can't add prefix, prefix entry field is blank!");
+              return;
+            }
+          $newShortName = ($prefix + $shortName);
+          break;
+
+      case 2:
+          if ($suffix == "")
+              {
+              warning -sl 0 ("Can't add suffix, suffix entry field is blank!");
+              return;
+            }
+          $newShortName = ($shortName + $suffix);
+          break;
+
+      case 3:
+          if (`radioButtonGrp -q -select rnmtyp` == 1) 
+          {
+               if ($rename == "")
+                  {
+                  warning -sl 0 ("Can't rename and number, rename entry field is blank!");
+                  return;
+                  }
+              // get index of string as user wants
+            int $n = $i + $start;
+              // pad of 0's
+            string $padStr = "";
+            
+              // Add padding as needed
+            for ($p=1; $p < $padding; ++$p)
+                {
+            if ($n < pow(10, $p) )
+                $padStr += "0";
+            }
+            
+            $newShortName = ($rename+$padStr+$n);
+              break;
+          }
+          
+          if (`radioButtonGrp -q -select rnmtyp` == 2) 
+          {
+             if ($rename == "")
+                  {
+                  warning -sl 0 ("Can't rename and number, rename entry field is blank!");
+                  return;
+                  }
+              // get index of string as user wants
+            int $n = $i;
+            $newShortName = ($rename+$lower[$n]);
+              break;
+          }
+          
+          if (`radioButtonGrp -q -select rnmtyp` == 3) 
+          {
+             if ($rename == "")
+                  {
+                  warning -sl 0 ("Can't rename and number, rename entry field is blank!");
+                  return;
+                  }
+              // get index of string as user wants
+            int $n = $i;
+            $newShortName = ($rename+$upper[$n]);
+              break;
+          }
+        
+
+      } // end of switch
+   
+            if (`objExists $obj`)
+            {
+                
+               if ($mode != 0)
+               {
+                    $newName = `rename $obj $newShortName`;
+                   //print ( "     Renaming To      " +  $newShortName  + "\n");
+               }
+            }
+          select -r $newName;
+          string $newLongNames[] = `ls -sl -long`;
+          string $newLongName = $newLongNames[0];
+          
+          // Now update rest of stuff in list in case |long|names
+          // required it
+          for ($j=0; $j < $objCnt; ++$j)
+              {
+              string $tmp = $objs[$j];
+        
+              $tmp += "|";  // add to end for easy replacing
+              $tmp = `substitute ($obj+"|") $tmp ("|"+$newLongName+"|")`;
+              $tmp = chop($tmp);
+              
+              $objs[$j] = $tmp;
+              }
+        
+  }  // end of for all objs
+  select $objs;
+}
+
+//======================================================================
+//======================================================================
+// ---->  Change all geomectry suffix to _geo  <----
+//======================================================================
+//======================================================================
+
+global proc geoall()
+{
+    string $transforms[] = `ls -g`; 
+    string $polyMeshes[] = `filterExpand -sm 12 $transforms`; 
+    //print $polyMeshes;
+    for ($obj in $polyMeshes)
+    {
+        $shortName = getShortName($obj);
+        int $chk = `gmatch $shortName "*_geo"`;
+        int $chka = `gmatch $shortName "*_geo*"`;
+        if ($chka == 1 && $chk == 0)
+        {
+            string $buffer[];
+            $numTokens = `tokenize $shortName "_" $buffer`;
+            int $size = size($buffer)-1;
+            //print ($buffer[$size] +"\n");
+            int $chkb = `gmatch $buffer[$size] "*geo*"`;
+           
+            if ($chkb == 1)
+            {
+               string $newname = "";
+               int $stringSize = size($buffer[$size]);
+               string $newgeoname = `substring $buffer[$size] 4 $stringSize`;
+               $buffer[$size] = $newgeoname;
+               for ($buf in $buffer)
+               {
+                  $newname  = ($newname + $buf + "_");
+               }
+               string $allgeoname = ($newname + "geo");
+               string $newName = `rename $obj $allgeoname`;
+            }
+        }
+        if ($chk == 0 && $chka == 0) 
+        {
+           string $allgeoname = ($shortName + "_geo");
+           //print ($shortName + " to "  + $allgeoname + "\n");
+           string $newName = `rename $obj $allgeoname`;
+        }
+    }
+}
+
+
+
+//======================================================================
+//======================================================================
+// ---->  Change all Group suffix to _grp  <----
+//======================================================================
+//======================================================================
+
+global proc string[] getGroup()
+{
+    string $getconstraint[] = `ls -type "constraint"`;
+    string $getplacetex[] = `ls -type "place3dTexture"`;
+    string $toremove[];
+    appendStringArray($toremove, $getconstraint, size($getconstraint)); 
+    appendStringArray($toremove, $getplacetex, size($getplacetex)); 
+    
+    string $diff[] = `ls -type "transform"`;
+    string $getTrs[] = stringArrayRemoveExact($toremove, $diff);
+    int $i = 0;
+    string $getGroup[];
+    for ($i = 0; size($getTrs) > $i; $i++) 
+    {
+        string $getShape[] = `listRelatives -s $getTrs[$i]`;
+        if (!size($getShape))
+        {
+            $getGroup[size($getGroup)] = $getTrs[$i] ;    
+        }
+    }
+    return $getGroup;
+}
+
+global proc string[] getwrnggrp()
+{
+    string $getTrs[] = getGroup();
+    string $getGroup[];
+    clear $getGroup;
+    
+    int $progmex = size($getTrs);
+
+    for ($i = 0; size($getTrs) > $i; $i++) 
+    {
+        int $chk1 = `gmatch $getTrs[$i] "*_grp"`;
+        int $chk2 = `gmatch $getTrs[$i] "*_Grp"`;
+        int $chk3 = `gmatch $getTrs[$i] "*Ctrl*"`;
+        int $chk4 = `gmatch $getTrs[$i] "*_C_*"`;
+        int $chk = `gmatch $getTrs[$i] "group*"`;
+        if ($chk1 == 0 && $chk2 == 0  && $chk3 == 0 && $chk4 == 0 || $chk == 1)
+        {
+            $getGroup[size($getGroup)] = $getTrs[$i] ;
+        }
+    }
+    //print $getGroup;
+    return $getGroup;
+}
+
+
+
+global proc allgrp( ){
+    string $grpsns[] = getwrnggrp();
+    for ($obj in $grpsns)
+        {
+            $shortName = getShortName($obj);
+            int $chk = `gmatch $shortName "*_grp"`;
+            int $chka = `gmatch $shortName "*_grp*"`;
+            if ($chka == 1 && $chk == 0)
+            {
+                string $buffer[];
+                $numTokens = `tokenize $shortName "_" $buffer`;
+                int $size = size($buffer)-1;
+                //print ($buffer[$size] +"\n");
+                int $chkb = `gmatch $buffer[$size] "*grp*"`;
+               
+                if ($chkb == 1)
+                {
+                   string $newname = "";
+                   int $stringSize = size($buffer[$size]);
+                   string $newgeoname = `substring $buffer[$size] 4 $stringSize`;
+                   $buffer[$size] = $newgeoname;
+                   for ($buf in $buffer)
+                   {
+                      $newname  = ($newname + $buf + "_");
+                   }
+                   string $allgeoname = ($newname + "grp");
+                   string $newName = `rename $obj $allgeoname`;
+                }
+            }
+            if ($chk == 0 && $chka == 0) 
+            {
+            //print ($obj + "\n");
+            string $allgeoname = ($shortName + "_grp");
+            string $newName = `rename $shortName $allgeoname`;
+            }
+         }
+} 
+
+
+//======================================================================
+//======================================================================
+// ---->  Change all matirial suffix to _mat  <----
+//======================================================================
+//======================================================================
+
+global proc allmat( ){
+
+  string $AllMatListss[] ;
+  $AllMatListss = `ls  -mat`;
+  for ($mat in $AllMatListss)
+  {
+    if ( $mat != "lambert1" && $mat != "particleCloud1" && $mat != "standardSurface1" )
+    {
+        int $chk = `gmatch $mat "*_mat"`;
+        if ($chk == 0)
+        {
+            string $allmatname = ($mat + "_mat");
+            string $newName = `rename $mat $allmatname`; 
+        }
+    }
+}
+
+} 
+
+
+
+
+//======================================================================
+//======================================================================
+// ---->  Quick Suffix  <----
+//======================================================================
+//======================================================================
+
+
+global proc quickSuffix(string $suffix)
+{//quickSuffix
+
+  string $jointSelecteda[0]= `ls -sl -long`;
+  string $jointSelected[0]= sort($jointSelecteda);
+  int $jointSelectedSize = size($jointSelected);
+
+  for ($i=$jointSelectedSize-1; $i >= 0; $i--)
+  {
+    string $obj = $jointSelected[$i];
+  
+    string $pathNodes[];
+    int $numTokens = tokenize($obj, "|", $pathNodes);
+    string $myObj = $pathNodes[$numTokens - 1];
+    
+    rename $obj ($myObj + $suffix);
+  }
+}//quickSuffix
+
+
+
+//======================================================================
+//======================================================================
+// ---->  Remove Last character <----
+//======================================================================
+//======================================================================
+
+global proc remove_LastChr()
+{//remove_LastChr
+
+  //string $objects[] = `ls -sl`;
+  string $jointSelecteda[0]= `ls -sl -long`;
+  string $jointSelected[0]= sort($jointSelecteda);
+  int $jointSelectedSize = size($jointSelected);
+
+  for ($i=$jointSelectedSize-1; $i >= 0; $i--)
+  {
+    string $obj = $jointSelected[$i];
+  
+    string $pathNodes[];
+    int $numTokens = tokenize($obj, "|", $pathNodes);
+    string $myObj = $pathNodes[$numTokens - 1];
+    
+    int $stringSize = size($myObj);
+
+    
+    if ($stringSize > 1) 
+    {
+      string $newName = `substring $myObj 1 ($stringSize - 1)`;
+      rename $obj $newName;
+    }
+  } 
+}//remove_LastChr
+
+
+
+//======================================================================
+//======================================================================
+// ---->  Remove First character <----
+//======================================================================
+//======================================================================
+
+global proc remove_FirstChr()
+{//remove_FirstChr
+
+  //string $objects[] = `ls -sl`;
+  string $jointSelecteda[0]= `ls -sl -long`;
+  string $jointSelected[0]= sort($jointSelecteda);
+  int $jointSelectedSize = size($jointSelected);
+
+  for ($i=$jointSelectedSize-1; $i >= 0; $i--)
+  {
+    string $obj = $jointSelected[$i];
+  
+    string $pathNodes[];
+    int $numTokens = tokenize($obj, "|", $pathNodes);
+    string $myObj = $pathNodes[$numTokens - 1];
+    
+    int $stringSize = size($myObj);
+    
+    if ($stringSize > 1) 
+    {
+      string $newName = `substring $myObj 2 $stringSize`;
+      rename $obj $newName;
+    }
+  }
+}//remove_FirstChr
+
+
+
+//======================================================================
+//======================================================================
+// ---->  Rename Selected Shapes <----
+//======================================================================
+//======================================================================
+
+global proc renameSelectedShape()
+{//renameSelectedShape
+  string $objects[] = `ls -sl`;
+
+  string $objTransform;
+  for ($objTransform in $objects)
+  {
+  
+    string $shapes[] = `listRelatives -s -f $objTransform`;
+    
+    string $pathTransNodes[];
+    int $numTokens = tokenize($objTransform, "|", $pathTransNodes);
+    string $myTransObj = $pathTransNodes[$numTokens - 1];
+    
+    string $obj;
+    int $num = 1;
+    
+    for ($obj in $shapes)
+    {
+      string $newShapeName = ($myTransObj + "_Shape" + $num);
+      rename $obj $newShapeName;
+      $num += 1;
+    }
+  }
+}//renameSelectedShape
+
+//======================================================================
+//======================================================================
+// ---->  Selected mesh check  <----
+//======================================================================
+//======================================================================
+
+global proc selsuffix(string $type)
+{
+    string $select[] = {};
+    string $transforms[] = `ls -sl`;
+    select -cl;
+    for ($obj in $transforms)
+    {
+         int $chk = `gmatch $obj ("*"+$type)`;
+         if ($chk == 0)
+         {
+            select $obj;
+            quickSuffix $type;
+         }
+    }
+    //for selection back
+    for ($obj in $transforms)
+    {
+        print $obj;
+        int $chk = `gmatch $obj ("*"+$type)`;
+        if ($chk == 0)
+        {
+            $select[size ($select)] = $obj + $type;
+        }
+        else
+        {
+            $select[size ($select)] = $obj;
+        }
+    }
+    select -r $select;
+}
+cometRename();
+

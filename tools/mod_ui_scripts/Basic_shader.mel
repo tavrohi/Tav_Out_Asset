@@ -1,0 +1,420 @@
+global proc defaultshaderwin()
+{
+string $defaultshaderwindow;
+if (`windowPref -ex defaultshaderwindow`==1) windowPref -r defaultshaderwindow; 
+if(`window -q -ex defaultshaderwindow`) deleteUI defaultshaderwindow;
+window -w 420 -h 250 -s 0 -mxb 0 -mnb 1 -mb 0 -tlb 0  -tbm 1 -t "Default Shader" defaultshaderwindow;
+columnLayout -adjustableColumn true;
+        text -al "center" -w 200 -h 20 -fn "boldLabelFont" "Default shader Blinn" ;
+        separator -style "in" -h 4;
+        rowColumnLayout  -nc 3 -cw 1 350 -co 3 "both" 5 ;
+            radioButtonGrp   -nrb 3 -cw3 150 60 60 -cat 1 "left" 20  -cl3 "center" "center" "center" -la3 "aiStandardSurface" "Blinn" "Lambert"   -sl 1 blinnlambert;
+            button    -l"     " -w 30 -bgc  1 1 1 -c "shader(\"picked_clr\")"picked_clr;
+            symbolButton -h 30 -w 30   -ann "Pick Any Color" -image "TypePivot_200.png"  -c "pickclr";
+        setParent ..;
+        separator -style "in" -h 4;
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.659 0.773 0.42 -c "shader(\"01_01\")" gb_01_01;
+            button    -l"     " -w 30 -bgc  0.612 0.765 0.4 -c "shader(\"01_02\")" gb_01_02; 
+            button    -l"     " -w 30 -bgc  0.565 0.761 0.38 -c "shader(\"01_03\")" gb_01_03; 
+            button    -l"     " -w 30 -bgc  0.51 0.753 0.357 -c "shader(\"01_04\")" gb_01_04; 
+            button    -l"     " -w 30 -bgc  0.463 0.749 0.337 -c "shader(\"01_05\")" gb_01_05; 
+            button    -l"     " -w 30 -bgc  0.412 0.741 0.306 -c "shader(\"01_06\")" gb_01_06; 
+            button    -l"     " -w 30 -bgc  0.357 0.737 0.286 -c "shader(\"01_07\")" gb_01_07; 
+            button    -l"     " -w 30 -bgc  0.314 0.698 0.271 -c "shader(\"01_08\")" gb_01_08; 
+            button    -l"     " -w 30 -bgc  0.271 0.627 0.251 -c "shader(\"01_09\")" gb_01_09; 
+            button    -l"     " -w 30 -bgc  0.227 0.561 0.227 -c "shader(\"01_10\")" gb_01_10; 
+            button    -l"     " -w 30 -bgc  0.188 0.49 0.216 -c "shader(\"01_11\")" gb_01_11;
+            button    -l"     " -w 30 -bgc  0.149 0.42 0.196 -c "shader(\"01_12\")" gb_01_12;
+            button    -l"     " -w 30 -bgc  0.106 0.353 0.176 -c "shader(\"01_13\")" gb_01_13;
+            button    -l"     " -w 30 -bgc  0.059 0.282 0.153 -c "shader(\"01_14\")" gb_01_14;  
+        setParent ..;
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.757 0.745 0.302 -c "shader(\"02_01\")" gb_02_01;
+            button    -l"     " -w 30 -bgc  0.733 0.745 0.286 -c "shader(\"02_02\")" gb_02_02; 
+            button    -l"     " -w 30 -bgc  0.706 0.753 0.267 -c "shader(\"02_03\")" gb_02_03; 
+            button    -l"     " -w 30 -bgc  0.678 0.757 0.243 -c "shader(\"02_04\")" gb_02_04; 
+            button    -l"     " -w 30 -bgc  0.651 0.761 0.227 -c "shader(\"02_05\")" gb_02_05; 
+            button    -l"     " -w 30 -bgc  0.627 0.765 0.208 -c "shader(\"02_06\")" gb_02_06; 
+            button    -l"     " -w 30 -bgc  0.596 0.769 0.184 -c "shader(\"02_07\")" gb_02_07; 
+            button    -l"     " -w 30 -bgc  0.549 0.737 0.173 -c "shader(\"02_08\")" gb_02_08; 
+            button    -l"     " -w 30 -bgc  0.475 0.659 0.157 -c "shader(\"02_09\")" gb_02_09; 
+            button    -l"     " -w 30 -bgc  0.404 0.576 0.141 -c "shader(\"02_10\")" gb_02_10; 
+            button    -l"     " -w 30 -bgc  0.329 0.502 0.129 -c "shader(\"02_11\")" gb_02_11;
+            button    -l"     " -w 30 -bgc  0.255 0.424 0.11 -c "shader(\"02_12\")" gb_02_12;
+            button    -l"     " -w 30 -bgc  0.188 0.345 0.102 -c "shader(\"02_13\")" gb_02_13;
+            button    -l"     " -w 30 -bgc  0.114 0.267 0.09 -c "shader(\"02_14\")" gb_02_14;  
+        setParent ..;
+        
+         rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.839 0.71 0.267 -c "shader(\"03_01\")" gb_03_01;
+            button    -l"     " -w 30 -bgc  0.839 0.722 0.235 -c "shader(\"03_02\")" gb_03_02; 
+            button    -l"     " -w 30 -bgc  0.835 0.741 0.216 -c "shader(\"03_03\")" gb_03_03; 
+            button    -l"     " -w 30 -bgc  0.835 0.757 0.18 -c "shader(\"03_04\")" gb_03_04; 
+            button    -l"     " -w 30 -bgc  0.831 0.769 0.149 -c "shader(\"03_05\")" gb_03_05; 
+            button    -l"     " -w 30 -bgc  0.827 0.784 0.118 -c "shader(\"03_06\")" gb_03_06; 
+            button    -l"     " -w 30 -bgc  0.824 0.796 0.094 -c "shader(\"03_07\")" gb_03_07; 
+            button    -l"     " -w 30 -bgc  0.769 0.765 0.067 -c "shader(\"03_08\")" gb_03_08; 
+            button    -l"     " -w 30 -bgc  0.675 0.682 0.059 -c "shader(\"03_09\")" gb_03_09; 
+            button    -l"     " -w 30 -bgc  0.576 0.592 0.047 -c "shader(\"03_10\")" gb_03_10; 
+            button    -l"     " -w 30 -bgc  0.475 0.506 0.039 -c "shader(\"03_11\")" gb_03_11;
+            button    -l"     " -w 30 -bgc  0.376 0.416 0.027 -c "shader(\"03_12\")" gb_03_12;
+            button    -l"     " -w 30 -bgc  0.275 0.329 0.02 -c "shader(\"03_13\")" gb_03_13;
+            button    -l"     " -w 30 -bgc  0.176 0.247 0.012 -c "shader(\"03_14\")" gb_03_14;  
+        setParent ..;
+         rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.906 0.659 0.388 -c "shader(\"04_01\")" gb_04_01;
+            button    -l"     " -w 30 -bgc  0.918 0.675 0.333 -c "shader(\"04_02\")" gb_04_02; 
+            button    -l"     " -w 30 -bgc  0.937 0.698 0.278 -c "shader(\"04_03\")" gb_04_03; 
+            button    -l"     " -w 30 -bgc  0.945 0.714 0.22 -c "shader(\"04_04\")" gb_04_04; 
+            button    -l"     " -w 30 -bgc  0.961 0.733 0.161 -c "shader(\"04_05\")" gb_04_05; 
+            button    -l"     " -w 30 -bgc  0.976 0.753 0.106 -c "shader(\"04_06\")" gb_04_06; 
+            button    -l"     " -w 30 -bgc  0.984 0.773 0.043 -c "shader(\"04_07\")" gb_04_07; 
+            button    -l"     " -w 30 -bgc  0.933 0.737 0.02 -c "shader(\"04_08\")" gb_04_08; 
+            button    -l"     " -w 30 -bgc  0.816 0.651 0.008 -c "shader(\"04_09\")" gb_04_09; 
+            button    -l"     " -w 30 -bgc  0.702 0.565 0.008 -c "shader(\"04_10\")" gb_04_10; 
+            button    -l"     " -w 30 -bgc  0.58 0.486 0.008 -c "shader(\"04_11\")" gb_04_11;
+            button    -l"     " -w 30 -bgc  0.467 0.396 0.004 -c "shader(\"04_12\")" gb_04_12;
+            button    -l"     " -w 30 -bgc  0.345 0.31 0.008 -c "shader(\"04_13\")" gb_04_13;
+            button    -l"     " -w 30 -bgc  0.227 0.224 0 -c "shader(\"04_14\")" gb_04_14;  
+        setParent ..;
+         rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.965 0.604 0.506 -c "shader(\"05_01\")" gb_05_01;
+            button    -l"     " -w 30 -bgc  0.969 0.604 0.443 -c "shader(\"05_02\")" gb_05_02; 
+            button    -l"     " -w 30 -bgc  0.961 0.588 0.376 -c "shader(\"05_03\")" gb_05_03; 
+            button    -l"     " -w 30 -bgc  0.961 0.58 0.314 -c "shader(\"05_04\")" gb_05_04; 
+            button    -l"     " -w 30 -bgc  0.965 0.569 0.255 -c "shader(\"05_05\")" gb_05_05; 
+            button    -l"     " -w 30 -bgc  0.953 0.561 0.184 -c "shader(\"05_06\")" gb_05_06; 
+            button    -l"     " -w 30 -bgc  0.961 0.549 0.122 -c "shader(\"05_07\")" gb_05_07; 
+            button    -l"     " -w 30 -bgc  0.902 0.518 0.082 -c "shader(\"05_08\")" gb_05_08; 
+            button    -l"     " -w 30 -bgc  0.796 0.471 0.071 -c "shader(\"05_09\")" gb_05_09; 
+            button    -l"     " -w 30 -bgc  0.694 0.416 0.055 -c "shader(\"05_10\")" gb_05_10; 
+            button    -l"     " -w 30 -bgc  0.584 0.361 0.043 -c "shader(\"05_11\")" gb_05_11;
+            button    -l"     " -w 30 -bgc  0.475 0.31 0.027 -c "shader(\"05_12\")" gb_05_12;
+            button    -l"     " -w 30 -bgc  0.373 0.255 0.02 -c "shader(\"05_13\")" gb_05_13;
+            button    -l"     " -w 30 -bgc  0.267 0.204 0.004-c "shader(\"05_14\")" gb_05_14;  
+        setParent ..;
+         rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  1 0.565 0.627 -c "shader(\"06_01\")" gb_06_01;
+            button    -l"     " -w 30 -bgc  0.984 0.525 0.557 -c "shader(\"06_02\")" gb_06_02; 
+            button    -l"     " -w 30 -bgc  0.976 0.49 0.482 -c "shader(\"06_03\")" gb_06_03; 
+            button    -l"     " -w 30 -bgc  0.965 0.455 0.404 -c "shader(\"06_04\")" gb_06_04; 
+            button    -l"     " -w 30 -bgc  0.953 0.416 0.341 -c "shader(\"06_05\")" gb_06_05; 
+            button    -l"     " -w 30 -bgc  0.941 0.38 0.263 -c "shader(\"06_06\")" gb_06_06; 
+            button    -l"     " -w 30 -bgc  0.929 0.341 0.196 -c "shader(\"06_07\")" gb_06_07; 
+            button    -l"     " -w 30 -bgc  0.871 0.31 0.145 -c "shader(\"06_08\")" gb_06_08; 
+            button    -l"     " -w 30 -bgc  0.784 0.286 0.125 -c "shader(\"06_09\")" gb_06_09; 
+            button    -l"     " -w 30 -bgc  0.694 0.267 0.098 -c "shader(\"06_10\")" gb_06_10; 
+            button    -l"     " -w 30 -bgc  0.6 0.243 0.071 -c "shader(\"06_11\")" gb_06_11;
+            button    -l"     " -w 30 -bgc  0.51 0.216 0.051 -c "shader(\"06_12\")" gb_06_12;
+            button    -l"     " -w 30 -bgc  0.412 0.2 0.02 -c "shader(\"06_13\")" gb_06_13;
+            button    -l"     " -w 30 -bgc  0.325 0.176 0 -c "shader(\"06_14\")" gb_06_14;  
+        setParent ..;
+        
+         rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  1 0.561 0.659 -c "shader(\"07_01\")" gb_07_01;
+            button    -l"     " -w 30 -bgc  0.988 0.494 0.588 -c "shader(\"07_02\")" gb_07_02; 
+            button    -l"     " -w 30 -bgc  0.969 0.427 0.525 -c "shader(\"07_03\")" gb_07_03; 
+            button    -l"     " -w 30 -bgc  0.945 0.357 0.463 -c "shader(\"07_04\")" gb_07_04; 
+            button    -l"     " -w 30 -bgc  0.933 0.29 0.388 -c "shader(\"07_05\")" gb_07_05; 
+            button    -l"     " -w 30 -bgc  0.918 0.224 0.325 -c "shader(\"07_06\")" gb_07_06; 
+            button    -l"     " -w 30 -bgc  0.898 0.161 0.259 -c "shader(\"07_07\")" gb_07_07; 
+            button    -l"     " -w 30 -bgc  0.851 0.122 0.212 -c "shader(\"07_08\")" gb_07_08; 
+            button    -l"     " -w 30 -bgc  0.773 0.125 0.188 -c "shader(\"07_09\")" gb_07_09; 
+            button    -l"     " -w 30 -bgc  0.694 0.129 0.165 -c "shader(\"07_10\")" gb_07_10; 
+            button    -l"     " -w 30 -bgc  0.612 0.129 0.141 -c "shader(\"07_11\")" gb_07_11;
+            button    -l"     " -w 30 -bgc  0.533 0.125 0.114 -c "shader(\"07_12\")" gb_07_12;
+            button    -l"     " -w 30 -bgc  0.427 0.098 0.055 -c "shader(\"07_13\")" gb_07_13;
+            button    -l"     " -w 30 -bgc  0.376 0.137 0.067 -c "shader(\"07_14\")" gb_07_14;  
+        setParent ..;
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  1 0.553 0.694 -c "shader(\"08_01\")" gb_08_01;
+            button    -l"     " -w 30 -bgc  0.992 0.486 0.635 -c "shader(\"08_02\")" gb_08_02; 
+            button    -l"     " -w 30 -bgc  0.976 0.427 0.573 -c "shader(\"08_03\")" gb_08_03; 
+            button    -l"     " -w 30 -bgc  0.961 0.365 0.518 -c "shader(\"08_04\")" gb_08_04; 
+            button    -l"     " -w 30 -bgc  0.949 0.294 0.463 -c "shader(\"08_05\")" gb_08_05; 
+            button    -l"     " -w 30 -bgc  0.937 0.235 0.4 -c "shader(\"08_06\")" gb_08_06; 
+            button    -l"     " -w 30 -bgc  0.922 0.188 0.357 -c "shader(\"08_07\")" gb_08_07; 
+            button    -l"     " -w 30 -bgc  0.878 0.137 0.302 -c "shader(\"08_08\")" gb_08_08; 
+            button    -l"     " -w 30 -bgc  0.8 0.133 0.275 -c "shader(\"08_09\")" gb_08_09; 
+            button    -l"     " -w 30 -bgc  0.725 0.125 0.247 -c "shader(\"08_10\")" gb_08_10; 
+            button    -l"     " -w 30 -bgc  0.647 0.122 0.22 -c "shader(\"08_11\")" gb_08_11;
+            button    -l"     " -w 30 -bgc  0.569 0.114 0.196 -c "shader(\"08_12\")" gb_08_12;
+            button    -l"     " -w 30 -bgc  0.49 0.11 0.176 -c "shader(\"08_13\")" gb_08_13;
+            button    -l"     " -w 30 -bgc  0.416 0.102 0.145 -c "shader(\"08_14\")" gb_08_14;  
+        setParent ..;
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  1 0.549 0.718 -c "shader(\"09_01\")" gb_09_01;
+            button    -l"     " -w 30 -bgc  0.988 0.49 0.667 -c "shader(\"09_02\")" gb_09_02; 
+            button    -l"     " -w 30 -bgc  0.976 0.427 0.62 -c "shader(\"09_03\")" gb_09_03; 
+            button    -l"     " -w 30 -bgc  0.973 0.369 0.573 -c "shader(\"09_04\")" gb_09_04; 
+            button    -l"     " -w 30 -bgc  0.969 0.306 0.522 -c "shader(\"09_05\")" gb_09_05; 
+            button    -l"     " -w 30 -bgc  0.949 0.247 0.467 -c "shader(\"09_06\")" gb_09_06; 
+            button    -l"     " -w 30 -bgc  0.945 0.184 0.42 -c "shader(\"09_07\")" gb_09_07; 
+            button    -l"     " -w 30 -bgc  0.906 0.153 0.384 -c "shader(\"09_08\")" gb_09_08; 
+            button    -l"     " -w 30 -bgc  0.82 0.141 0.349 -c "shader(\"09_09\")" gb_09_09; 
+            button    -l"     " -w 30 -bgc  0.733 0.133 0.314 -c "shader(\"09_10\")" gb_09_10; 
+            button    -l"     " -w 30 -bgc  0.655 0.129 0.275 -c "shader(\"09_11\")" gb_09_11;
+            button    -l"     " -w 30 -bgc  0.576 0.114 0.239 -c "shader(\"09_12\")" gb_09_12;
+            button    -l"     " -w 30 -bgc  0.49 0.106 0.204 -c "shader(\"09_13\")" gb_09_13;
+            button    -l"     " -w 30 -bgc  0.408 0.098 0.173 -c "shader(\"09_14\")" gb_09_14;  
+        setParent ..;
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.906 0.58 0.784 -c "shader(\"10_01\")" gb_10_01;
+            button    -l"     " -w 30 -bgc  0.914 0.518 0.737 -c "shader(\"10_02\")" gb_10_02; 
+            button    -l"     " -w 30 -bgc  0.925 0.455 0.694 -c "shader(\"10_03\")" gb_10_03; 
+            button    -l"     " -w 30 -bgc  0.937 0.392 0.647 -c "shader(\"10_04\")" gb_10_04; 
+            button    -l"     " -w 30 -bgc  0.941 0.325 0.596 -c "shader(\"10_05\")" gb_10_05; 
+            button    -l"     " -w 30 -bgc  0.957 0.267 0.553 -c "shader(\"10_06\")" gb_10_06; 
+            button    -l"     " -w 30 -bgc  0.957 0.204 0.498 -c "shader(\"10_07\")" gb_10_07; 
+            button    -l"     " -w 30 -bgc  0.925 0.165 0.451 -c "shader(\"10_08\")" gb_10_08; 
+            button    -l"     " -w 30 -bgc  0.839 0.153 0.416 -c "shader(\"10_09\")" gb_10_09; 
+            button    -l"     " -w 30 -bgc  0.745 0.145 0.369 -c "shader(\"10_10\")" gb_10_10; 
+            button    -l"     " -w 30 -bgc  0.671 0.129 0.322 -c "shader(\"10_11\")" gb_10_11;
+            button    -l"     " -w 30 -bgc  0.584 0.118 0.282 -c "shader(\"10_12\")" gb_10_12;
+            button    -l"     " -w 30 -bgc  0.494 0.106 0.227 -c "shader(\"10_13\")" gb_10_13;
+            button    -l"     " -w 30 -bgc  0.408 0.094 0.192  -c "shader(\"10_14\")" gb_10_14;  
+        setParent ..;
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.792 0.631 0.851 -c "shader(\"11_01\")" gb_11_01;
+            button    -l"     " -w 30 -bgc  0.792 0.565 0.804 -c "shader(\"11_02\")" gb_11_02; 
+            button    -l"     " -w 30 -bgc  0.792 0.565 0.804 -c "shader(\"11_03\")" gb_11_03; 
+            button    -l"     " -w 30 -bgc  0.776 0.435 0.706 -c "shader(\"11_04\")" gb_11_04; 
+            button    -l"     " -w 30 -bgc  0.773 0.373 0.663 -c "shader(\"11_05\")" gb_11_05; 
+            button    -l"     " -w 30 -bgc  0.769 0.302 0.616 -c "shader(\"11_06\")" gb_11_06; 
+            button    -l"     " -w 30 -bgc  0.765 0.243 0.569 -c "shader(\"11_07\")" gb_11_07; 
+            button    -l"     " -w 30 -bgc  0.733 0.2 0.522 -c "shader(\"11_08\")" gb_11_08; 
+            button    -l"     " -w 30 -bgc  0.678 0.176 0.467 -c "shader(\"11_09\")" gb_11_09; 
+            button    -l"     " -w 30 -bgc  0.627 0.161 0.42 -c "shader(\"11_10\")" gb_11_10; 
+            button    -l"     " -w 30 -bgc  0.573 0.145 0.369 -c "shader(\"11_11\")" gb_11_11;
+            button    -l"     " -w 30 -bgc  0.514 0.125 0.31 -c "shader(\"11_12\")" gb_11_12;
+            button    -l"     " -w 30 -bgc  0.463 0.11 0.259 -c "shader(\"11_13\")" gb_11_13;
+            button    -l"     " -w 30 -bgc  0.408 0.09 0.216 -c "shader(\"11_14\")" gb_11_14;  
+        setParent ..;
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.678 0.675 0.902 -c "shader(\"12_01\")" gb_12_01;
+            button    -l"     " -w 30 -bgc  0.655 0.608 0.859 -c "shader(\"12_02\")" gb_12_02; 
+            button    -l"     " -w 30 -bgc  0.627 0.545 0.816 -c "shader(\"12_03\")" gb_12_03; 
+            button    -l"     " -w 30 -bgc  0.6 0.475 0.769 -c "shader(\"12_04\")" gb_12_04; 
+            button    -l"     " -w 30 -bgc  0.573 0.404 0.718 -c "shader(\"12_05\")" gb_12_05; 
+            button    -l"     " -w 30 -bgc  0.553 0.341 0.678 -c "shader(\"12_06\")" gb_12_06; 
+            button    -l"     " -w 30 -bgc  0.529 0.275 0.635 -c "shader(\"12_07\")" gb_12_07; 
+            button    -l"     " -w 30 -bgc  0.506 0.235 0.584 -c "shader(\"12_08\")" gb_12_08; 
+            button    -l"     " -w 30 -bgc  0.478 0.216 0.529 -c "shader(\"12_09\")" gb_12_09; 
+            button    -l"     " -w 30 -bgc  0.443 0.196 0.475 -c "shader(\"12_10\")" gb_12_10; 
+            button    -l"     " -w 30 -bgc  0.42 0.176 0.424 -c "shader(\"12_11\")" gb_12_11;
+            button    -l"     " -w 30 -bgc  0.392 0.157 0.361 -c "shader(\"12_12\")" gb_12_12;
+            button    -l"     " -w 30 -bgc  0.361 0.137 0.306 -c "shader(\"12_13\")" gb_12_13;
+            button    -l"     " -w 30 -bgc  0.337 0.118 0.255 -c "shader(\"12_14\")" gb_12_14;  
+        setParent ..;
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.569 0.729 0.91 -c "shader(\"13_01\")" gb_13_01;
+            button    -l"     " -w 30 -bgc  0.529 0.655 0.878 -c "shader(\"13_02\")" gb_13_02; 
+            button    -l"     " -w 30 -bgc  0.478 0.596 0.839 -c "shader(\"13_03\")" gb_13_03; 
+            button    -l"     " -w 30 -bgc  0.435 0.522 0.808 -c "shader(\"13_04\")" gb_13_04; 
+            button    -l"     " -w 30 -bgc  0.388 0.447 0.765 -c "shader(\"13_05\")" gb_13_05; 
+            button    -l"     " -w 30 -bgc  0.345 0.384 0.733 -c "shader(\"13_06\")" gb_13_06; 
+            button    -l"     " -w 30 -bgc  0.302 0.314 0.694 -c "shader(\"13_07\")" gb_13_07; 
+            button    -l"     " -w 30 -bgc  0.282 0.267 0.647 -c "shader(\"13_08\")" gb_13_08; 
+            button    -l"     " -w 30 -bgc  0.271 0.247 0.584 -c "shader(\"13_09\")" gb_13_09; 
+            button    -l"     " -w 30 -bgc  0.271 0.227 0.533 -c "shader(\"13_10\")" gb_13_10; 
+            button    -l"     " -w 30 -bgc  0.267 0.208 0.471 -c "shader(\"13_11\")" gb_13_11;
+            button    -l"     " -w 30 -bgc  0.267 0.188 0.42 -c "shader(\"13_12\")" gb_13_12;
+            button    -l"     " -w 30 -bgc  0.263 0.169 0.357 -c "shader(\"13_13\")" gb_13_13;
+            button    -l"     " -w 30 -bgc  0.255 0.145 0.294 -c "shader(\"13_14\")" gb_13_14;  
+        setParent ..;
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.475 0.788 0.886 -c "shader(\"14_01\")" gb_14_01;
+            button    -l"     " -w 30 -bgc  0.424 0.733 0.863 -c "shader(\"14_02\")" gb_14_02; 
+            button    -l"     " -w 30 -bgc  0.38 0.675 0.839 -c "shader(\"14_03\")" gb_14_03; 
+            button    -l"     " -w 30 -bgc  0.333 0.62 0.82 -c "shader(\"14_04\")" gb_14_04; 
+            button    -l"     " -w 30 -bgc  0.278 0.561 0.788 -c "shader(\"14_05\")" gb_14_05; 
+            button    -l"     " -w 30 -bgc  0.235 0.506 0.769 -c "shader(\"14_06\")" gb_14_06; 
+            button    -l"     " -w 30 -bgc  0.184 0.451 0.745 -c "shader(\"14_07\")" gb_14_07; 
+            button    -l"     " -w 30 -bgc  0.157 0.4 0.694 -c "shader(\"14_08\")" gb_14_08; 
+            button    -l"     " -w 30 -bgc  0.169 0.365 0.643 -c "shader(\"14_09\")" gb_14_09; 
+            button    -l"     " -w 30 -bgc  0.169 0.329 0.58 -c "shader(\"14_10\")" gb_14_10; 
+            button    -l"     " -w 30 -bgc  0.173 0.294 0.518 -c "shader(\"14_11\")" gb_14_11;
+            button    -l"     " -w 30 -bgc  0.176 0.255 0.455 -c "shader(\"14_12\")" gb_14_12;
+            button    -l"     " -w 30 -bgc  0.176 0.22 0.4 -c "shader(\"14_13\")" gb_14_13;
+            button    -l"     " -w 30 -bgc  0.188 0.184 0.341 -c "shader(\"14_14\")" gb_14_14;  
+        setParent ..;
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.38 0.843 0.859 -c "shader(\"15_01\")" gb_15_01;
+            button    -l"     " -w 30 -bgc  0.341 0.804 0.851 -c "shader(\"15_02\")" gb_15_02; 
+            button    -l"     " -w 30 -bgc  0.294 0.765 0.831 -c "shader(\"15_03\")" gb_15_03; 
+            button    -l"     " -w 30 -bgc  0.251 0.729 0.824 -c "shader(\"15_04\")" gb_15_04; 
+            button    -l"     " -w 30 -bgc  0.208 0.69 0.812 -c "shader(\"15_05\")" gb_15_05; 
+            button    -l"     " -w 30 -bgc  0.169 0.655 0.804 -c "shader(\"15_06\")" gb_15_06; 
+            button    -l"     " -w 30 -bgc  0.122 0.62 0.788 -c "shader(\"15_07\")" gb_15_07; 
+            button    -l"     " -w 30 -bgc  0.098 0.573 0.741 -c "shader(\"15_08\")" gb_15_08; 
+            button    -l"     " -w 30 -bgc  0.098 0.514 0.678 -c "shader(\"15_09\")" gb_15_09; 
+            button    -l"     " -w 30 -bgc  0.106 0.455 0.612 -c "shader(\"15_10\")" gb_15_10; 
+            button    -l"     " -w 30 -bgc  0.106 0.396 0.549 -c "shader(\"15_11\")" gb_15_11;
+            button    -l"     " -w 30 -bgc  0.11 0.341 0.475 -c "shader(\"15_12\")" gb_15_12;
+            button    -l"     " -w 30 -bgc  0.118 0.286 0.42 -c "shader(\"15_13\")" gb_15_13;
+            button    -l"     " -w 30 -bgc  0.118 0.224 0.341 -c "shader(\"15_14\")" gb_15_14;  
+        setParent ..;
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.365 0.847 0.769 -c "shader(\"16_01\")" gb_16_01;
+            button    -l"     " -w 30 -bgc  0.325 0.843 0.792 -c "shader(\"16_02\")" gb_16_02; 
+            button    -l"     " -w 30 -bgc  0.271 0.835 0.796 -c "shader(\"16_03\")" gb_16_03; 
+            button    -l"     " -w 30 -bgc  0.22 0.827 0.804 -c "shader(\"16_04\")" gb_16_04; 
+            button    -l"     " -w 30 -bgc  0.165 0.816 0.816 -c "shader(\"16_05\")" gb_16_05; 
+            button    -l"     " -w 30 -bgc  0.11 0.808 0.824 -c "shader(\"16_06\")" gb_16_06; 
+            button    -l"     " -w 30 -bgc  0.059 0.796 0.831 -c "shader(\"16_07\")" gb_16_07; 
+            button    -l"     " -w 30 -bgc  0.031 0.753 0.8 -c "shader(\"16_08\")" gb_16_08; 
+            button    -l"     " -w 30 -bgc  0.035 0.671 0.714 -c "shader(\"16_09\")" gb_16_09; 
+            button    -l"     " -w 30 -bgc  0.039 0.588 0.639 -c "shader(\"16_10\")" gb_16_10; 
+            button    -l"     " -w 30 -bgc  0.043 0.506 0.561 -c "shader(\"16_11\")" gb_16_11;
+            button    -l"     " -w 30 -bgc  0.043 0.42 0.482 -c "shader(\"16_12\")" gb_16_12;
+            button    -l"     " -w 30 -bgc  0.051 0.337 0.404 -c "shader(\"16_13\")" gb_16_13;
+            button    -l"     " -w 30 -bgc  0.055 0.255 0.329 -c "shader(\"16_14\")" gb_16_14;  
+        setParent ..;
+        
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.996 0.839 0.467 -c "shader(\"17_01\")" gb_17_01;
+            button    -l"     " -w 30 -bgc  0.965 0.804 0.443 -c "shader(\"17_02\")" gb_17_02; 
+            button    -l"     " -w 30 -bgc  0.925 0.765 0.404 -c "shader(\"17_03\")" gb_17_03; 
+            button    -l"     " -w 30 -bgc  0.89 0.729 0.376 -c "shader(\"17_04\")" gb_17_04; 
+            button    -l"     " -w 30 -bgc  0.859 0.698 0.353 -c "shader(\"17_05\")" gb_17_05; 
+            button    -l"     " -w 30 -bgc  0.82 0.655 0.318 -c "shader(\"17_06\")" gb_17_06; 
+            button    -l"     " -w 30 -bgc  0.784 0.62 0.29 -c "shader(\"17_07\")" gb_17_07; 
+            button    -l"     " -w 30 -bgc  0.761 0.584 0.267 -c "shader(\"17_08\")" gb_17_08; 
+            button    -l"     " -w 30 -bgc  0.714 0.545 0.235 -c "shader(\"17_09\")" gb_17_09; 
+            button    -l"     " -w 30 -bgc  0.686 0.525 0.216 -c "shader(\"17_10\")" gb_17_10; 
+            button    -l"     " -w 30 -bgc  0.616 0.435 0.141-c "shader(\"17_11\")" gb_17_11;
+            button    -l"     " -w 30 -bgc  0.545 0.361 0.086 -c "shader(\"17_12\")" gb_17_12;
+            button    -l"     " -w 30 -bgc  0.475 0.286 0.027 -c "shader(\"17_13\")" gb_17_13;
+            button    -l"     " -w 30 -bgc  0.439 0.251 0 -c "shader(\"17_14\")" gb_17_14;  
+        setParent ..;
+        
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.957 0.831 0.733 -c "shader(\"18_01\")" gb_18_01;
+            button    -l"     " -w 30 -bgc  0.937 0.812 0.663 -c "shader(\"18_02\")" gb_18_02; 
+            button    -l"     " -w 30 -bgc  0.949 0.769 0.565 -c "shader(\"18_03\")" gb_18_03; 
+            button    -l"     " -w 30 -bgc  0.859 0.729 0.569 -c "shader(\"18_04\")" gb_18_04; 
+            button    -l"     " -w 30 -bgc  0.898 0.792 0.608 -c "shader(\"18_05\")" gb_18_05; 
+            button    -l"     " -w 30 -bgc  0.871 0.702 0.494 -c "shader(\"18_06\")" gb_18_06; 
+            button    -l"     " -w 30 -bgc  0.859 0.663 0.455 -c "shader(\"18_07\")" gb_18_07; 
+            button    -l"     " -w 30 -bgc  0.82 0.584 0.337 -c "shader(\"18_08\")" gb_18_08; 
+            button    -l"     " -w 30 -bgc  0.78 0.573 0.306 -c "shader(\"18_09\")" gb_18_09; 
+            button    -l"     " -w 30 -bgc  0.741 0.502 0.286 -c "shader(\"18_10\")" gb_18_10; 
+            button    -l"     " -w 30 -bgc  0.678 0.439 0.224 -c "shader(\"18_11\")" gb_18_11;
+            button    -l"     " -w 30 -bgc  0.522 0.322 0.153 -c "shader(\"18_12\")" gb_18_12;
+            button    -l"     " -w 30 -bgc  0.329 0.22 0.157 -c "shader(\"18_13\")" gb_18_13;
+            button    -l"     " -w 30 -bgc  0.247 0.176 0.149 -c "shader(\"18_14\")" gb_18_14;  
+        setParent ..;
+        
+        
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 30 -bgc  0.933 0.933 0.933 -c "shader(\"19_01\")" gb_19_01;
+            button    -l"     " -w 30 -bgc  0.867 0.867 0.867 -c "shader(\"19_02\")" gb_19_02; 
+            button    -l"     " -w 30 -bgc  0.808 0.808 0.808 -c "shader(\"19_03\")" gb_19_03; 
+            button    -l"     " -w 30 -bgc  0.745 0.729 0.725 -c "shader(\"19_04\")" gb_19_04; 
+            button    -l"     " -w 30 -bgc  0.604 0.604 0.604 -c "shader(\"19_05\")" gb_19_05; 
+            button    -l"     " -w 30 -bgc  0.475 0.475 0.475 -c "shader(\"19_06\")" gb_19_06; 
+            button    -l"     " -w 30 -bgc  0.4 0.4 0.4 -c "shader(\"19_07\")" gb_19_07; 
+            button    -l"     " -w 30 -bgc  0.302 0.302 0.302 -c "shader(\"19_08\")" gb_19_08; 
+            button    -l"     " -w 30 -bgc  0.239 0.239 0.239 -c "shader(\"19_09\")" gb_19_09; 
+            button    -l"     " -w 30 -bgc  0.169 0.169 0.169 -c "shader(\"19_10\")" gb_19_10; 
+            button    -l"     " -w 30 -bgc  0.133 0.133 0.133 -c "shader(\"19_11\")" gb_19_11;
+            button    -l"     " -w 30 -bgc  0.102 0.102 0.102 -c "shader(\"19_12\")" gb_19_12;
+            button    -l"     " -w 30 -bgc  0.067 0.067 0.067 -c "shader(\"19_13\")" gb_19_13;
+            button    -l"     " -w 30 -bgc  0.035 0.035 0.035 -c "shader(\"19_14\")" gb_19_14;  
+        setParent ..;
+        
+        
+        
+        rowColumnLayout  -nc 14 ;
+            button    -l"     " -w 52 -bgc  1 0 0 -c "shader(\"20_01\")" gb_20_01;
+            button    -l"     " -w 52 -bgc  0 1 0 -c "shader(\"20_02\")" gb_20_02; 
+            button    -l"     " -w 52 -bgc  0 0 1 -c "shader(\"20_03\")" gb_20_03; 
+            button    -l"     " -w 52 -bgc  1 1 0 -c "shader(\"20_04\")" gb_20_04; 
+            button    -l"     " -w 52 -bgc  1 0 1 -c "shader(\"20_05\")" gb_20_05; 
+            button    -l"     " -w 52 -bgc  0 1 1 -c "shader(\"20_06\")" gb_20_06; 
+            button    -l"     " -w 52 -bgc  0 0 0 -c "shader(\"20_07\")" gb_20_07; 
+            button    -l"     " -w 56 -bgc  1 1 1 -c "shader(\"20_08\")" gb_20_08; 
+        setParent ..;
+        button    -l"Material Attribute" -bgc  0.1 0.1 0.1 -w 200 -h 20  -command ShowShadingGroupAttributeEditor Material;
+        separator -style "in" -h 4;
+        button    -l "Delete Unused Shader" -w 200 -h 20  -bgc 0.1 0.1 0.1 -c MLdeleteUnused deleteunsednodebtn; 
+        separator -style "in" -h 4;
+        text -w 200 -al "center" -l "Script Developed by Anonymous ";
+    setParent ..;
+setParent ..;
+
+showWindow ;
+
+}
+
+
+global proc shader(string $type)
+{
+    float $bgc[] = `button -q -bgc ("gb_" + $type)`;
+    
+        string $SSCurSel[]=`ls -sl`;
+        // Create Shader
+        string $material;
+        $shadername = ("Basic_" + $type + "_mat");
+        $material = ($shadername + "SG");
+        
+        if (`radioButtonGrp -q -select blinnlambert` == 1) 
+        {
+            if(!`objExists $shadername`)
+            {
+                $material = `shadingNode -asShader aiStandardSurface -name $shadername` ;
+                setAttr ($material + ".baseColor") -type double3  $bgc[0] $bgc[1] $bgc[2];
+            }
+        }
+        
+        if (`radioButtonGrp -q -select blinnlambert` == 2) 
+        {
+            if(!`objExists $shadername`)
+            {
+                $material = `shadingNode -asShader blinn  -name $shadername` ;
+                setAttr ($material + ".color") -type double3  $bgc[0] $bgc[1] $bgc[2];
+                setAttr ($material + ".eccentricity") 0.37;
+                setAttr ($material + ".specularRollOff") 0.14;
+                setAttr ($material + ".reflectivity") 0.45;
+            }
+        }
+        
+        if (`radioButtonGrp -q -select blinnlambert` == 3) 
+        {
+            if(!`objExists $shadername`)
+            {
+                $material = `shadingNode -asShader lambert  -name $shadername` ;
+                setAttr ($material + ".color") -type double3  $bgc[0] $bgc[1] $bgc[2];
+            }
+        }
+
+        
+        select -cl;
+        for($obj in $SSCurSel)
+        {
+            select -add $obj;
+            hyperShade -assign $material;
+        }
+}
+
+global proc pickclr()
+{
+    float $value[] = `grabColor -rgb`;
+    button -e -bgc $value[0] $value[1] $value[2] picked_clr;
+    shader("picked_clr");
+}
+defaultshaderwin();

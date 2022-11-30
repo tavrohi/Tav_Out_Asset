@@ -1,0 +1,67 @@
+
+global proc NameSceneUI()
+{
+    string $listBox = "myScroll";
+    
+    if (`windowPref -ex matinfowin`==1) windowPref -r matinfowin; 
+    if(`window -q -ex matinfowin`) deleteUI matinfowin;
+    window  -w 220 -h 300 -s 0  -mnb 1 -mb 1 -i 0  -t "Mat Info" matinfowin;
+    columnLayout -co both 5  column;
+    separator  -w 215 -style "in" -h 8;
+    button -w 215 -h 25 -c "matnaming" -l "Material_Naming";
+    separator  -w 215 -style "in" -h 8;
+    textScrollList -w 215 -h 300 -ams true  -sc "updateChar" -dcc "MatAttribute" $listBox;
+    separator  -w 215 -style "in" -h 8;
+    showWindow;	
+}
+
+
+global proc matnaming()
+{
+	string $AllMatListss[] ;
+	string $current;
+	int $AllMatListssSizee;
+	$AllMatListss = `ls  -mat`;
+	$AllMatListssSizee = `size($AllMatListss)`;
+	textScrollList -e -removeAll myScroll;
+	for($current in $AllMatListss)
+	{
+		textScrollList -e -append $current myScroll; 
+	}
+}
+
+
+global proc updateChar()
+{
+	string $currentChar[] = `textScrollList -q -selectItem myScroll`;
+	int $te = `size($currentChar)`;
+	int $i;
+	for($i=0;$i<$te;$i++)
+	    {
+			select -tgl ({$currentChar[$i]});	
+			hyperShade -objects $currentChar[$i];
+		}
+	
+}	
+	
+global proc MatAttribute()
+{
+	string $currentChar[] = `textScrollList -q -selectItem myScroll`;
+	int $te = `size($currentChar)`;
+	int $i;
+	if($currentChar[0] == "None")
+	{
+		select({});
+	}
+	else
+	{   
+		for($i=0;$i<$te;$i++)
+		{
+			//select -tgl ({$currentChar[$i]});	
+			//hyperShade -objects $currentChar[$i];
+			showEditor $currentChar[$i];
+		}
+	}	
+}	
+
+

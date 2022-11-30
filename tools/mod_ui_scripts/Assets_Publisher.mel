@@ -1,0 +1,2037 @@
+
+
+global proc CheckListUi()
+{
+    
+    global string $check_emptygroup_files[];
+    global string $check_Freeze_trans_mesh[];
+    global string $check_duplicate_files[];
+    global string $check_duplicate_files_sep[];
+    global string $check_shape_end_num_files[];
+    global string $check_shape_node_match_trans_files[];
+    global string $check_Multiple_Uv[];
+    global string $check_same_naming_shd_files[];
+    global string $check_Triangles_Faces[];
+    global string $check_Nsided_Faces[];
+    global string $check_Cvszeero[];
+    global string $check_LayerCamera[];
+    global string $check_delhist[];
+    global string $check_nonmanifoldedges[];
+    global string $check_nonmanifoldVertex[];
+    //global string $check_global_scale_files[];
+    global string $check_key_on_files[];
+    string $fns=`file -q -sn -shn`;
+    string $fname= `basenameEx $fns`;
+    
+    if (`windowPref -ex chkastwindow`==1) windowPref -r chkastwindow;   
+    if(`window -q -ex chkastwindow`) deleteUI chkastwindow;
+    window -w 500 -h 40 -s 0 -mxb 0 -mnb 1 -mb 1 -tlb 0 -tlc 200 900 -tbm 1 -t "TAV Tools" chkastwindow;  
+    
+        columnLayout -bgc 0.1 0.1 0.1 -adjustableColumn true;
+
+        separator -st "in";  
+        radioCollection;
+        rowColumnLayout -numberOfColumns 4  -cw 1 350   -cw 2 50 -cw 3 50  -cw 4 50;
+   
+            radioButton -label "Check for empty groups" -onc ("fill_value " + "\n" + "check_empty_grps")checkemptygroup;
+            text  -l "" checkemptygroup;
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_emptygroup_files") ;
+            checkBox -label "Ignore" checkboxemptygroup;
+            
+            radioButton -label "Check for Freeze Transform of Mesh, Groups and Ctrls" -onc ("fill_value "+ "Check_freez_trans_mesh") checkfreeztransmnode_mesh;   
+            text  -l "" checkfreeztransmnode_mesh; 
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_Freeze_trans_mesh") ;
+            checkBox -label "Ignore" checkboxfreetran_mesh;
+
+            radioButton -label "Check for '_geo' '_grp' Name of Mesh and Groups" -onc ("fill_value " + "\n" + "check_name_geo_grp") checkgeogrpname;
+            text -en 1 -l "" checkgeogrpname;
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_duplicate_files") ;
+            checkBox -label "Ignore" checkboxillnode;
+            
+            radioButton -label "Check for Duplicate name" -onc ("fill_value "+ "checkduplicatenames") checkunwanteduplicatenode;
+            text  -l "" checkunwanteduplicatenode;    
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_duplicate_files_sep") ;
+            checkBox -label "Ignore" checkboxduplicatenode;
+           
+            radioButton -label "Check for Shape End with Number" -onc ("fill_value "+ "checkshapeendwithnum") checkshapeendwithnumnode;    
+            text  -l "" checkshapeendwithnumnode;
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_shape_end_num_files") ;
+            checkBox -label "Ignore" checkshapeendnode;
+            
+            radioButton -label "Check for Shape Name Match with Transform Node" -onc ("fill_value "+ "checkshapenodematchwithtrans") checkshapematchtransmnode;  
+            text  -l "" checkshapematchtransmnode;  
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_shape_node_match_trans_files") ;
+            checkBox -label "Ignore" checkshapenamematchnode;
+            
+            radioButton -label "Check for Multiple Uv Sets" -onc ("fill_value "+ "check_Multiple_Uv") checkmultipleuvnode;  
+            text  -l "" checkmultipleuvnode;
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_Multiple_Uv") ; 
+            checkBox -label "Ignore" checkboxmultipleuvnode;
+        
+            radioButton -label "Check for illegal shading names" -onc ("fill_value "+ "check_same_naming_shaders") checkillshadingnode; 
+            text  -l "" checkillshadingnode;  
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_same_naming_shd_files") ;
+            checkBox -label "Ignore" checkboxillshadingnode;
+            
+            radioButton -label "Check for Triangles Faces" -onc ("fill_value "+ "Check_Triangles_Faces") checkTrFaces; 
+            text  -l "" checkTrFaces; 
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_Triangles_Faces") ;
+            checkBox -label "Ignore" checkboxTrFaces;
+            
+            radioButton -label "Check for N-sided Faces" -onc ("fill_value "+ "Check_Nsided_Faces") checkNsidedFaces;
+            text  -l "" checkNsidedFaces;  
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_Nsided_Faces") ;
+            checkBox -label "Ignore" checkboxNsidedFaces;
+            
+            radioButton -label "Check for Cv's set to Zeero" -onc ("fill_value "+ "check_Cvszeero") checkCvszeero; 
+            text  -l "" checkCvszeero; 
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_Cvszeero") ;
+            checkBox -label "Ignore" checkboxCvszeero;
+            
+            radioButton -label "Check for Display Layer, Render Layer, Camera, Light" -onc ("fill_value "+ "checkLayerCamera") checkLayerCamera;  
+            text  -l "" checkLayerCamera;
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_LayerCamera") ;
+            checkBox -label "Ignore" checkboxLayercamera;
+            
+            radioButton -label "Check for Delete History" -onc ("fill_value "+ "checkDeleteHistory") checkdelhist;
+            text  -l "" checkdelhist;  
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_delhist") ;
+            checkBox -label "Ignore" checkboxdelhist;
+            
+            radioButton -label "Check for Non-Manifold Edges" -onc ("fill_value "+ "CheckNonManifoldEdges") checkNonManifoldEdges;  
+            text   -l "" checkNonManifoldEdges;
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_nonmanifoldedges") ;
+            checkBox -label "Ignore" checkboxNonManifoldEdges;
+            
+            radioButton -label "Check for Non-Manifold Vertex" -onc ("fill_value "+ "CheckNonManifoldVertex") checkNonManifoldVertex;  
+            text  -l "" checkNonManifoldVertex;
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_nonmanifoldVertex") ;
+            checkBox -label "Ignore" checkboxNonManifoldVertex;
+           
+            //radioButton -label "Check for zero Scale Attribute" -onc ("fill_value "+ "checkzeroscaleattr") checkzeroscaleattr;  
+            //button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_global_scale_files") ;
+            //checkBox -label "Ignore" checkboxzeroscaleattr;
+           
+            radioButton -label "Check for anim keys on ctrl" -onc ("fill_value "+ "checkkeyonctrls") checkforanimkeys;    
+            text  -l "" checkforanimkeys;
+            button -bgc 0.2 0.2 0.2 -l "Info" -c ("update_array $check_key_on_files");
+            checkBox -label "Ignore" checkboxforanimkeys;
+        setParent ..;  
+        separator -st "in";  
+        button -bgc 0.1 0.1 0.1 -l "Fix Shape Node Name/Number" -c "Fix_To_match_node;"; 
+        rowColumnLayout -numberOfColumns 2  -cw 1 200  -cw 2 300 -bgc 0.1 0.1 0.1;
+        text -al "left" -l "Status" ;
+        text -al "right" -l $fname ;
+        setParent ..;
+         
+        progressBar progressMain;
+        progressBar progressChild;
+        rowColumnLayout -numberOfColumns 2  -cw 1 200  -cw 2 300 -bgc 0.1 0.1 0.1;
+        text -al "left" -l "Click on Auto Check to Start" statusmain;
+        text -al "right" -l "" statuschild;
+        setParent ..;
+        
+        button -bgc 0.2 0.2 0.2 -l "Auto Check Assets" -c "Auto_Check_Assets()";
+         button -bgc 0.2 0.2 0.2 -l "Save Report" -c "report()";
+        //string $progresschild = `progressBar -maxValue 10 -width 300`;
+        separator -st "in"; 
+        separator -st "in";
+        text -l "Information";
+        textScrollList -numberOfRows 10 -sc "sel_items" -allowMultiSelection true info ;
+        text  -label  "Developed by Anonymous";
+        //button -bgc 0.2 0.2 0.2 -l "Fix Shape end With Number" -c "Fix_End_with_number";
+        
+    setParent ..; 
+    showWindow ;
+    
+}
+
+
+
+global proc Auto_Check_Assets()
+{
+    
+    global string $check_emptygroup_files[];
+    global string $check_Freeze_trans_mesh[];
+    global string $check_duplicate_files[];
+    global string $check_duplicate_files_sep[];
+    global string $check_shape_end_num_files[];
+    global string $check_shape_node_match_trans_files[];
+    global string $check_Multiple_Uv[];
+    global string $check_same_naming_shd_files[];
+    global string $check_Triangles_Faces[];
+    global string $check_Nsided_Faces[];
+    global string $check_Cvszeero[];
+    global string $check_LayerCamera[];
+    global string $check_delhist[];
+    global string $check_nonmanifoldedges[];
+    global string $check_nonmanifoldVertex[];
+    //global string $check_global_scale_files[];
+    global string $check_key_on_files[];
+    
+    clear $check_emptygroup_files;
+    clear $check_Freeze_trans_mesh;
+    clear $check_duplicate_files; 
+    clear $check_duplicate_files_sep;
+    clear $check_shape_end_num_files;
+    clear $check_shape_node_match_trans_files;
+    clear $check_Multiple_Uv;
+    clear $check_same_naming_shd_files; 
+    clear $check_Triangles_Faces; 
+    clear $check_Nsided_Faces;
+    clear $check_Cvszeero;
+    clear $check_LayerCamera;
+    clear $check_delhist;
+    clear $check_nonmanifoldedges;
+    clear $check_nonmanifoldVertex;
+    //clear $check_global_scale_files; 
+    clear $check_key_on_files; 
+    
+            
+   
+    string $commands[] = {
+    "check_empty_grps",
+    "Check_freez_trans_mesh",
+    "check_name_geo_grp",
+    "checkduplicatenames",
+    "checkshapeendwithnum",
+    "checkshapenodematchwithtrans",
+    "check_Multiple_Uv",
+    "check_same_naming_shaders",
+    "Check_Triangles_Faces",
+    "Check_Nsided_Faces",
+    "check_Cvszeero",
+    "checkLayerCamera",
+    "checkDeleteHistory",
+    "CheckNonManifoldEdges",
+    "CheckNonManifoldVertex",
+    "checkkeyonctrls",
+    "msssg"};
+    int $progmex = size($commands);
+    for ($i = 0; $i <size($commands); $i++)
+    {
+        evalDeferred -lp ("progressBar -e -max " + "\n" + $progmex + "\n" + " -progress " + "\n" + ($i+1) + "\n" + " progressMain");
+        evalDeferred -lp $commands[$i]; 
+        evalDeferred -lp ("textScrollList -e -ra info"); 
+    }
+    
+    
+    
+}   
+
+global proc report()
+{
+    string $fns=`file -q -sn -shn`;
+    string $fname= `basenameEx $fns`;
+    string $user = `getenv user`;
+    string $dateandtime = `date -f DD_MM_YYYY__hh_mm_ss`;
+    string $emptygrps = `text -q -l checkemptygroup`;
+    string $freezetra = `text -q -l checkfreeztransmnode_mesh`;
+    string $geogrpname = `text -q -l checkgeogrpname`;
+    string $dupnames = `text -q -l checkunwanteduplicatenode`;
+    string $shpnum = `text -q -l checkshapeendwithnumnode`;
+    string $shptra = `text -q -l checkshapematchtransmnode`;
+    string $unskinned = `text -q -l checkmultipleuvnode`;
+    string $illegalshd = `text -q -l checkillshadingnode`;
+    string $triface = `text -q -l checkTrFaces`;
+    string $nsideface = `text -q -l checkNsidedFaces`;
+    string $cvzeero = `text -q -l checkCvszeero`;
+    string $layercamera = `text -q -l checkLayerCamera`;
+    string $delhis = `text -q -l checkdelhist`;
+    string $nonmenifoldedge = `text -q -l checkNonManifoldEdges`;
+    string $nonmenifoldvtx = `text -q -l checkNonManifoldVertex`;
+    string $animkeys = `text -q -l checkforanimkeys`;
+    
+    
+    string $fullfname= "Scene Name \t\t:\t" +  $fname ;
+    string $fulluser = "User \t\t\t:\t" +  $user ;
+    string $fulldate = "Date and Time \t:\t" + `date` ;
+    string $fullemptygrps =  "Check for Empty groups \t\t:\t" +  $emptygrps ;
+    string $fullfreezetra = "Check for Freeze Transformation \t:\t" +  $freezetra ;
+    string $fullgeogrpname = "Check for _geo _grp name \t\t:\t" +  $geogrpname ;
+    string $fulldupnames = "Check for Duplicate mesh \t\t:\t" +  $dupnames ;
+    string $fullshpnum = "Check for Shapes with Number \t:\t" +  $shpnum ;
+    string $fullshptra =  "Check for Shape with Transforma \t:\t" +  $shptra ;
+    string $fullunskinned =  "Check for Unskinned mesh \t\t:\t" +  $unskinned ;
+    string $fullillegalshd = "Check for Illigal shading name  \t\t:\t" +  $illegalshd ;
+    string $fulltriface =  "Check for Triangles Faces \t\t:\t" +  $triface ;
+    string $fullnsideface = "Check for N-sided Faces \t\t:\t" +  $nsideface ;
+    string $fullcvzeero = "Check for Cv's set to Zeero \t\t:\t" +  $cvzeero ;
+    string $fulllayercamera = "Check for DR Layer, Camera, Light \t:\t" +  $layercamera ;
+    string $fulldelhis = "Check for Delete History \t\t:\t" +  $delhis ;
+    string $fullnonmenifoldedge = "Check for Non-Manifold Edges \t:\t" +  $nonmenifoldedge ;
+    string $fullnonmenifoldvtx =  "Check for Non-Manifold Vertex \t:\t" +  $nonmenifoldvtx ;
+    string $fullanimkeys = "Check for anim keys on ctrl \t\t:\t" +  $animkeys ;
+
+    string $fullcomment = $fullfname + "\n" + $fulluser + "\n" + $fulldate + "\n\n\n" + $fullemptygrps + "\n" + $fullfreezetra + "\n" + $fullgeogrpname + "\n" + $fulldupnames + "\n" + $fullshpnum + "\n" + $fullshptra + "\n" + $fullunskinned + "\n" + $fulltriface + "\n" + $fullnsideface + "\n" + $fullcvzeero + "\n" + $fulllayercamera + "\n" + $fulldelhis + "\n" + $fullnonmenifoldedge + "\n" + $fullnonmenifoldvtx + "\n" + $fullanimkeys;
+    
+    string $buffermxn[];
+    $numTokens = `tokenize $fname "_" $buffermxn`;
+    string $dirpath;
+    int $chkgab =  `gmatch $buffermxn[0] "gab"`;
+    int $chkrtm =  `gmatch $buffermxn[0] "rtm"`;
+    int $chkshv =  `gmatch $buffermxn[0] "shv"`;
+    int $chktuc =  `gmatch $buffermxn[0] "tuc"`;
+    if ($chkgab == 1)
+    {
+         $dirpath = "O:/05_workarea/02_asset/08_report/" + $fname + "/";
+    }
+    if ($chkrtm == 1)
+    {
+         $dirpath = "R:/05_workarea/02_asset/08_report/" + $fname + "/";
+    }
+    if ($chkshv == 1)
+    {
+         $dirpath = "S:/05_workarea/02_asset/08_report/" + $fname + "/";
+    }
+    if ($chktuc == 1)
+    {
+         $dirpath = "T:/05_workarea/02_asset/08_report/" + $fname + "/";
+    }
+    if ($chkgab == 0 && $chkrtm == 0 && $chkshv == 0 && $chktuc == 0)
+    {
+         confirmDialog -bgc 0.1 0.1 0.1 -title "File name not recognized" -message " 01 File name not proper. \n 02 make sure all in small case. \n 03 we support !!!!!!!!!!!! projects only."
+         -button "OK" -defaultButton "Ok"  -cancelButton "Ok" ;
+    }
+
+    int $chklitnm=`filetest -d $dirpath`;
+        if ($chklitnm == 0)
+        {
+                sysFile -makeDir $dirpath;
+        }
+    string $file = $dirpath + $fname + "(" + $dateandtime + ")"+".rtf" ;
+    print ("report saved : " + $file);
+    $fileId=`fopen $file "a"`;
+    fprint $fileId $fullcomment ;
+    fclose $fileId;
+    
+}
+
+
+
+
+//======================================================================
+//======================================================================
+// ----> Check for Muliple uv sets <----
+//======================================================================
+//======================================================================
+
+
+global proc check_Multiple_Uv()
+{
+    text -e -l  "Checking any Multiple UV sets" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkmultipleuvnode;
+    global string $check_Multiple_Uv[];
+    int $chks = `checkBox -q -v checkboxmultipleuvnode`;
+    if ($chks == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkmultipleuvnode;
+        radioButton -e -bgc 1 0.933 0.459 checkmultipleuvnode;     
+        return;
+    }
+    textScrollList -e -ra info; 
+    string $nmfe[] = multipleuvsets();
+    for($i=0;$i<size($nmfe);$i++)
+    {
+        if( `objExists $nmfe[$i]` )
+        {
+        textScrollList -e -a $nmfe[$i] info ;
+        }
+    } 
+    appendStringArray($check_Multiple_Uv, $nmfe, size($nmfe));
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkmultipleuvnode;
+        radioButton -e -bgc 1 0.463 0.463 checkmultipleuvnode;
+    }   
+    if ($numitem == 0)
+    {
+        text -e  -bgc  0.514 1 0.463 -l "Correct" checkmultipleuvnode;
+        radioButton -e -bgc 0.514 1 0.463 checkmultipleuvnode;
+    } 
+}
+
+global proc string[] multipleuvsets()
+{
+    string $transforms[] = `ls -long -g`;
+    string $polyMeshes[] = `filterExpand -sm 12 $transforms`;
+    string $wronggeo[];
+    int $i = 0;
+    int $progmex = size($polyMeshes);
+    int $amount = 0;
+    for ($mesh in $polyMeshes)
+        {
+            $amount++;
+            progressBar -e -max $progmex -progress $amount progressChild;
+            text -e -l ( $mesh + "\t\t\t\t" + "   " + $amount + "/" + $progmex   ) statuschild;
+            
+            int $indices[] = `polyUVSet -q -allUVSetsIndices $mesh`;
+            int $getsize = size($indices);
+            if ($getsize > 1)
+            {
+                $wronggeo[$i] = $mesh;
+                $i++;
+            }
+        }
+    print $wronggeo;
+    return $wronggeo;
+}
+
+
+
+//======================================================================
+//======================================================================
+// ----> Check for Non-Manifold Vertex <----
+//======================================================================
+//======================================================================
+
+
+global proc CheckNonManifoldVertex()
+{
+    text -e -l  "Checking any Non-Manifold Vertex" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkNonManifoldVertex;
+    global string $check_nonmanifoldVertex[];
+    int $chks = `checkBox -q -v checkboxNonManifoldVertex`;
+    if ($chks == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkNonManifoldVertex;
+        radioButton -e -bgc 1 0.933 0.459 checkNonManifoldVertex;     
+        return;
+    }
+    textScrollList -e -ra info; 
+    string $nmfe[] = nonmanifoldVertex();
+    for($i=0;$i<size($nmfe);$i++)
+    {
+        if( `objExists $nmfe[$i]` )
+        {
+        textScrollList -e -a $nmfe[$i] info ;
+        }
+    } 
+    appendStringArray($check_nonmanifoldVertex, $nmfe, size($nmfe));
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkNonManifoldVertex;
+        radioButton -e -bgc 1 0.463 0.463 checkNonManifoldVertex;
+    }   
+    if ($numitem == 0)
+    {
+        text -e  -bgc  0.514 1 0.463 -l "Correct" checkNonManifoldVertex;
+        radioButton -e -bgc 0.514 1 0.463 checkNonManifoldVertex;
+    } 
+}
+
+global proc string[] nonmanifoldVertex()
+{
+    string $transforms[] = `ls -long -g`;
+    string $polyMeshes[] = `filterExpand -sm 12 $transforms`;
+    string $wronggeo[];
+    int $listsize = 0;
+    int $i = 0;
+    int $progmex = size($polyMeshes);
+    int $amount = 0;
+    for ($mesh in $polyMeshes)
+    {
+        $amount++;
+        progressBar -e -max $progmex -progress $amount progressChild;
+        text -e -l ( $mesh + "\t\t\t\t" + "   " + $amount + "/" + $progmex   ) statuschild;
+        select $mesh;
+        string $nonmenifoldvtx[] =  `polyInfo -nmv`;
+        $listsize = size($nonmenifoldvtx);
+        if ($listsize > 0)
+        {
+            appendStringArray($wronggeo, $nonmenifoldvtx, size($nonmenifoldvtx));
+            //$wronggeo[$i] = $nonmenifoldvtx;
+            //$i++;
+        }
+        select -cl;
+    }
+    return $wronggeo;
+}
+
+
+
+
+
+
+
+
+
+//======================================================================
+//======================================================================
+// ----> Check for Non-Manifold Edges <----
+//======================================================================
+//======================================================================
+
+
+global proc CheckNonManifoldEdges()
+{
+    text -e -l  "Checking any Non-Manifold Edges" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkNonManifoldEdges;
+    global string $check_nonmanifoldedges[];
+    int $chks = `checkBox -q -v checkboxNonManifoldEdges`;
+    if ($chks == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkNonManifoldEdges;
+        radioButton -e -bgc 1 0.933 0.459 checkNonManifoldEdges;     
+        return;
+    }
+    textScrollList -e -ra info; 
+    string $nmfe[] = nonmanifoldedges();
+    for($i=0;$i<size($nmfe);$i++)
+    {
+        if( `objExists $nmfe[$i]` )
+        {
+        textScrollList -e -a $nmfe[$i] info ;
+        }
+    } 
+    appendStringArray($check_nonmanifoldedges, $nmfe, size($nmfe));
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkNonManifoldEdges;
+        radioButton -e -bgc 1 0.463 0.463 checkNonManifoldEdges;
+    }   
+    if ($numitem == 0)
+    {
+        text -e  -bgc  0.514 1 0.463 -l "Correct" checkNonManifoldEdges;
+        radioButton -e -bgc 0.514 1 0.463 checkNonManifoldEdges;
+    } 
+}
+
+global proc string[] nonmanifoldedges()
+{
+    string $transforms[] = `ls -long -g`;
+    string $polyMeshes[] = `filterExpand -sm 12 $transforms`;
+    string $wronggeo[];
+    int $listsize = 0;
+    int $i = 0;
+    int $progmex = size($polyMeshes);
+    int $amount = 0;
+    for ($mesh in $polyMeshes)
+    {
+        $amount++;
+        progressBar -e -max $progmex -progress $amount progressChild;
+        text -e -l ( $mesh + "\t\t\t\t" + "   " + $amount + "/" + $progmex   ) statuschild;
+        select $mesh;
+        string $nonmenifoldedge[] =  `polyInfo -nme`;
+        $listsize = size($nonmenifoldedge);
+        if ($listsize > 0)
+        {
+            appendStringArray($wronggeo, $nonmenifoldedge, size($nonmenifoldedge));
+            //$wronggeo[$i] = $nonmenifoldedge;
+            //$i++;
+        }
+        select -cl;
+    }
+    return $wronggeo;
+}
+
+
+//======================================================================
+//======================================================================
+// ----> Check for Delete history <----
+//======================================================================
+//======================================================================
+
+global proc checkDeleteHistory()
+{
+    text -e -l  "Checking any History in Mesh" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkdelhist;
+    global string $check_delhist[];
+    int $chks = `checkBox -q -v checkboxdelhist`;
+    if ($chks == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkdelhist;
+        radioButton -e -bgc 1 0.933 0.459 checkdelhist;     
+        return;
+    }
+    textScrollList -e -ra info; 
+    string $delhis[] = del_history();
+    for($i=0;$i<size($delhis);$i++)
+    {
+        if( `objExists $delhis[$i]` )
+        {
+        textScrollList -e -a $delhis[$i] info ;
+        }
+    } 
+    appendStringArray($check_delhist, $delhis, size($delhis));
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkdelhist;
+        radioButton -e -bgc 1 0.463 0.463 checkdelhist;
+    }   
+    if ($numitem == 0)
+    {
+        text -e  -bgc  0.514 1 0.463 -l "Correct" checkdelhist;
+        radioButton -e -bgc 0.514 1 0.463 checkdelhist;
+    } 
+}
+
+
+global proc string[] del_history()
+{
+    string $transforms[] = `ls -long -g`;
+    string $polyMeshes[] = `filterExpand -sm 12 $transforms`;
+    string $wronggeo[];
+    int $listsize = 0;
+    int $i = 0;
+    int $progmex = size($polyMeshes);
+    int $amount = 0;
+    for ($mesh in $polyMeshes)
+    {
+        $amount++;
+        progressBar -e -max $progmex -progress $amount progressChild;
+        text -e -l ( $mesh + "\t\t\t\t" + "   " + $amount + "/" + $progmex   ) statuschild;
+        string $listhist[] =  `listHistory -pdo 1 -gl 1 $mesh`;
+        $listsize = size($listhist);
+        int $chk = `gmatch $listhist[0] "initialShadingGroup"`;
+        if ($listsize > 0 && $chk == 0)
+        {
+            $wronggeo[$i] = $mesh;
+            $i++;
+        }
+    }
+    return $wronggeo;
+}
+
+
+//======================================================================
+//======================================================================
+// ----> Check for all Camera, Lights, Display Layers, Render Layers <----
+//======================================================================
+//======================================================================
+
+
+
+global proc checkLayerCamera()
+{
+    text -e -l  "Checking Layer Camera and Lights" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkLayerCamera;
+    global string $check_LayerCamera[];
+    clear $check_LayerCamera;
+    int $chks = `checkBox -q -v checkboxLayercamera`;
+    if ($chks == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkLayerCamera;
+        radioButton -e -bgc 1 0.933 0.459 checkLayerCamera;     
+        return;
+    }
+    textScrollList -e -ra info; 
+    string $layercam[] = layer_camera();
+    for($i=0;$i<size($layercam);$i++)
+    {
+        //if( `objExists $layercam[$i]` )
+        //{
+        textScrollList -e -a $layercam[$i] info ;
+        //}
+    } 
+    appendStringArray($check_LayerCamera, $layercam, size($layercam));
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkLayerCamera;
+        radioButton -e -bgc 1 0.463 0.463 checkLayerCamera;
+    }   
+    if ($numitem == 0)
+    {
+        text -e  -bgc  0.514 1 0.463 -l "Correct" checkLayerCamera;
+        radioButton -e -bgc 0.514 1 0.463 checkLayerCamera;
+    } 
+}
+
+
+
+
+global proc string[] layer_camera()
+{
+    string $lights[] = `ls -type "light"`;
+    string $cameras[] = `ls -type "camera"`;
+    string $renderLayer[] = `ls -type "renderLayer"`;
+    string $displayLayer[] = `ls -type "displayLayer"`;
+    string $wringnodes[];
+    int $progmex = size($lights)+size($cameras)+size($renderLayer)+size($displayLayer);
+    int $amount = 0;
+    
+     for($l in $lights)
+     {
+         $amount++;
+         progressBar -e -max $progmex -progress $amount progressChild;
+         text -e -l ( $l + "\t\t\t\t" + "Lights   " + $amount + "/" + $progmex   ) statuschild;
+         
+         select $l;
+         pickWalk -d up;
+         $wringnodes[size($wringnodes)] = $l;
+     }
+     
+     for($c in $cameras)
+     {
+         $amount++;
+         progressBar -e -max $progmex -progress $amount progressChild;
+         text -e -l ( $c + "\t\t\t\t" + "Camera   " + $amount + "/" + $progmex   ) statuschild;
+         
+        if(($c=="perspShape")||($c=="topShape")||($c=="sideShape")||($c=="frontShape"))
+        {
+            continue;
+        }
+        else
+        {
+            select $c;
+            pickWalk -d up;
+            $wringnodes[size($wringnodes)] = $c;
+        }
+     }
+     
+     editRenderLayerGlobals -crl defaultRenderLayer;
+     for($r in $renderLayer)
+     {
+         $amount++;
+         progressBar -e -max $progmex -progress $amount progressChild;
+         text -e -l ( $r + "\t\t\t\t" + "Render Layers   " + $amount + "/" + $progmex   ) statuschild;
+         
+         if($r=="defaultRenderLayer")
+         {
+             continue;
+         }
+         else
+         {
+             $wringnodes[size($wringnodes)] = ("Render Layer : " + $r);
+             //delete $r;
+         }
+     }
+      
+      
+    for($d in $displayLayer)
+    {
+        $amount++;
+         progressBar -e -max $progmex -progress $amount progressChild;
+         text -e -l ( $d + "\t\t\t\t" + "Display Layers   " + $amount + "/" + $progmex   ) statuschild;
+         
+        if($d=="defaultLayer")
+        {
+            continue;
+        }
+        else
+        {
+            $wringnodes[size($wringnodes)] = ("Display Layer : " + $d);
+            //delete $d;
+        }
+    }
+    return $wringnodes;
+}
+
+
+//======================================================================
+//======================================================================
+// ---->  Check for all CV's Should be zeero <----
+//======================================================================
+//======================================================================
+
+
+
+
+global proc check_Cvszeero()
+{
+    text -e -l  "Checking Cv's" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkCvszeero;
+    global string $check_Cvszeero[];
+    int $chks = `checkBox -q -v checkboxCvszeero`;
+    if ($chks == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkCvszeero;
+        radioButton -e -bgc 1 0.933 0.459 checkCvszeero;     
+        return;
+    }
+    textScrollList -e -ra info; 
+    string $cv_mesh[] = Cvs_zeero();
+    for($i=0;$i<size($cv_mesh);$i++)
+    {
+        if( `objExists $cv_mesh[$i]` )
+        {
+        textScrollList -e -a $cv_mesh[$i] info ;
+        }
+    } 
+    appendStringArray($check_Cvszeero, $cv_mesh, size($cv_mesh));
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkCvszeero;
+        radioButton -e -bgc 1 0.463 0.463 checkCvszeero;
+    }   
+    if ($numitem == 0)
+    {
+        text -e  -bgc  0.514 1 0.463 -l "Correct" checkCvszeero;
+        radioButton -e -bgc 0.514 1 0.463 checkCvszeero;
+    } 
+}
+
+
+
+global proc string[] Cvs_zeero()
+{
+    string $transforms[] = `ls -long -g`;
+    string $polyMeshes[] = `filterExpand -sm 12 $transforms`;
+    string $wronggeo[];
+    clear $wronggeo;
+    int $k=0;
+    
+    int $progmex = size($polyMeshes);
+    int $amount = 0;
+    global string  $progressChild;
+    for ($mesh in $polyMeshes)
+    {
+        select $mesh;
+        int $totalvt[] = `polyEvaluate -v $mesh`;
+        int $chk = 0;
+        
+        $amount++;
+        progressBar -e -max $progmex -progress $amount progressChild;
+        text -e -l ( $mesh + "\t\t\t\t" + "   " + $amount + "/" + $progmex   ) statuschild;
+        
+        for ($i = 0; $i < $totalvt[0]; $i++)
+        {
+            string $geo = $mesh;
+            float $vtxx = `getAttr ($geo + ".pnts[" +$i+ "].pntx")`;
+            float $vtxy = `getAttr ($geo + ".pnts[" +$i+ "].pnty")`;
+            float $vtxz = `getAttr ($geo + ".pnts[" +$i+ "].pntz")`;
+            if ($vtxx > 0 || $vtxx < 0 || $vtxy > 0 || $vtxy < 0 || $vtxz > 0 || $vtxz < 0)
+            {
+                $chk = 1;
+                break;
+            }
+        }
+        if ($chk == 1)
+        {
+           $wronggeo[$k] = $mesh;
+           $k++;
+        }
+    }
+    return $wronggeo;
+}
+
+
+
+//======================================================================
+//======================================================================
+// ---->  Check for Triangles Faces <----
+//======================================================================
+//======================================================================
+
+
+
+global proc Check_Triangles_Faces()
+{
+    text -e -l  "Checking Triangles Faces" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkTrFaces;
+    global string $check_Triangles_Faces[];
+    int $chks = `checkBox -q -v checkboxTrFaces`;
+    if ($chks == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkTrFaces;
+        radioButton -e -bgc 1 0.933 0.459 checkTrFaces;     
+        return;
+    }
+    textScrollList -e -ra info; 
+    string $tr_mesh[] = mesh_tr_faces();
+    for($i=0;$i<size($tr_mesh);$i++)
+    {
+        if( `objExists $tr_mesh[$i]` )
+        {
+        textScrollList -e -a $tr_mesh[$i] info ;
+        }
+    } 
+    appendStringArray($check_Triangles_Faces, $tr_mesh, size($tr_mesh));
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkTrFaces;
+        radioButton -e -bgc 1 0.463 0.463 checkTrFaces;
+    }   
+    if ($numitem == 0)
+    {
+        text -e  -bgc  0.514 1 0.463 -l "Correct" checkTrFaces;
+        radioButton -e -bgc 0.514 1 0.463 checkTrFaces;
+    } 
+}
+    
+global proc string[]  mesh_tr_faces()
+{
+    string $transforms[] = `ls -long -g`;
+    string $polyMeshes[] = `filterExpand -sm 12 $transforms`;
+    string $getthreeGeo[];
+    int $progmex = size($polyMeshes);
+    int $amount = 0;
+    for ($mesh in $polyMeshes)
+    {
+        $amount++;
+        progressBar -e -max $progmex -progress $amount progressChild;
+        text -e -l ( $mesh + "\t\t\t\t" + "   " + $amount + "/" + $progmex   ) statuschild;
+        select -cl;
+        select $mesh;
+        string $ThrMshSngl = `polySelectConstraint -m 3 -t 8 -sz 1`;
+        string $getWrngGeoa[] = `ls -sl`;
+        appendStringArray($getthreeGeo, $getWrngGeoa, size($getWrngGeoa));
+    }
+    select -cl;
+    catchQuiet(`polySelectConstraint -size 0`);
+    return $getthreeGeo;
+}
+
+
+
+
+//======================================================================
+//======================================================================
+// ---->  Check for N-sided Faces <----
+//======================================================================
+//======================================================================
+
+
+
+global proc Check_Nsided_Faces()
+{
+    text -e -l  "Checking Nsided Faces" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkNsidedFaces;
+    global string $check_Nsided_Faces[];
+    int $chks = `checkBox -q -v checkboxNsidedFaces`;
+    if ($chks == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkNsidedFaces;
+        radioButton -e -bgc 1 0.933 0.459 checkNsidedFaces;     
+        return;
+    }
+    textScrollList -e -ra info; 
+    string $ns_mesh[] = mesh_nsided_faces();
+    for($i=0;$i<size($ns_mesh);$i++)
+    {
+        if( `objExists $ns_mesh[$i]` )
+        {
+        textScrollList -e -a $ns_mesh[$i] info ;
+        }
+    } 
+    appendStringArray($check_Nsided_Faces, $ns_mesh, size($ns_mesh));
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkNsidedFaces;
+        radioButton -e -bgc 1 0.463 0.463 checkNsidedFaces;
+    }   
+    if ($numitem == 0)
+    {
+        text -e  -bgc  0.514 1 0.463 -l "Correct" checkNsidedFaces;
+        radioButton -e -bgc 0.514 1 0.463 checkNsidedFaces;
+    } 
+}
+    
+global proc string[]  mesh_nsided_faces()
+{
+    string $transforms[] = `ls -long -g`;
+    string $polyMeshes[] = `filterExpand -sm 12 $transforms`;
+    string $getnsideGeo[];
+    int $progmex = size($polyMeshes);
+    int $amount = 0;
+    for ($mesh in $polyMeshes)
+    {
+        $amount++;
+        progressBar -e -max $progmex -progress $amount progressChild;
+        text -e -l ( $mesh + "\t\t\t\t" + "   " + $amount + "/" + $progmex   ) statuschild;
+        select -cl;
+        select $mesh;
+        string $nMshSngl = `polySelectConstraint -m 3 -t 8 -sz 3`;
+        string $getWrngGeoa[] = `ls -sl`;
+        appendStringArray($getnsideGeo, $getWrngGeoa, size($getWrngGeoa));
+    }
+    select -cl;
+    catchQuiet(`polySelectConstraint -size 0`);
+    return $getnsideGeo;
+}
+
+
+
+
+//======================================================================
+//======================================================================
+// ---->  Check all mesh freeze transform for mesh  <----
+//======================================================================
+//======================================================================
+
+
+global proc Check_freez_trans_mesh()
+{
+    text -e -l  "Checking Freeze Transformation" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkfreeztransmnode_mesh;
+    global string $check_Freeze_trans_mesh[];
+    int $chks = `checkBox -q -v checkboxfreetran_mesh`;
+    if ($chks == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkfreeztransmnode_mesh;
+        radioButton -e -bgc 1 0.933 0.459 checkfreeztransmnode_mesh;     
+        return;
+    }
+    //catchQuiet(`mesh_freez_trans`);
+    //radioButton -e -bgc 0.514 1 0.463 checkfreeztransmnode_mesh; 
+    textScrollList -e -ra info; 
+    string $emoty_mesh[] = mesh_freez_trans(); 
+    for($i=0;$i<size($emoty_mesh);$i++)
+    {
+        if( `objExists $emoty_mesh[$i]` )
+        {
+        textScrollList -e -a $emoty_mesh[$i] info ;
+        }
+    }    
+    appendStringArray($check_Freeze_trans_mesh, $emoty_mesh, size($emoty_mesh));
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkfreeztransmnode_mesh;
+        radioButton -e -bgc 1 0.463 0.463 checkfreeztransmnode_mesh;
+    }   
+    if ($numitem == 0)
+    {
+        text -e  -bgc  0.514 1 0.463 -l "Correct" checkfreeztransmnode_mesh;
+        radioButton -e -bgc 0.514 1 0.463 checkfreeztransmnode_mesh;
+    }   
+    //$check_Freeze_trans_mesh[0] = "Freez Mesh Done";
+}
+
+global proc string[] mesh_freez_trans()
+{
+    string $transforms[] = `ls -long -g`;
+    string $polyMeshes[] = `filterExpand -sm 12 $transforms`;
+    string $allGeoGrp[] = getGroup();
+    string $fltctrls[] = check_freez_trans_ctrls();
+    appendStringArray($polyMeshes, $allGeoGrp, size($allGeoGrp));
+    appendStringArray($polyMeshes, $fltctrls, size($fltctrls));
+    int $x=0;
+    int $z=0;
+    string $falutmesh[];
+    
+    int $progmex = size($polyMeshes);
+    int $amount = 0;
+    
+    for($x=0;$x<size($polyMeshes);$x++)
+    {
+        $amount++;
+        progressBar -e -max $progmex -progress $amount progressChild;
+        text -e -l ($polyMeshes[$x] + "\t\t\t\t" + "   " + $amount + "/" + $progmex  ) statuschild;
+
+        string $attrs[] = `listAttr  $polyMeshes[$x]`;
+        //print $attrs;
+        int $i=0;
+        for ($i=0;$i<size($attrs);$i++)
+        {
+        catchQuiet ( `setAttr -lock false ($polyMeshes[$x] + "." + $attrs[$i])`);
+        }
+        //select -r  $polyMeshes[$x];
+        string  $chk1bm = check_transvs($polyMeshes[$x]);
+        //print $chk1bm;
+        
+        if ($chk1bm == 0)
+        {
+            //textScrollList -e -a $polyMeshes[$x] info ;
+            $falutmesh[$z] = $polyMeshes[$x];
+            $z = $z + 1;
+        }
+    }
+    //print $transforms;
+    return $falutmesh;
+
+}
+
+
+global proc  string[] check_freez_trans_ctrls()
+{
+    // string $all_nurbs_ctrls[] =`
+    string $transforms[] = `ls -tr`;
+    string $polyMeshes[] = `filterExpand -sm 9 $transforms`;
+    //string $polyMeshes2[] = `ls -type shape`;
+    //print($polyMeshes);
+    //string $diff[] = stringArrayRemove($polyMeshes2,$polyMeshes);
+    string $curves[] = `ls {"curve*"}`;
+    string $diff2[] = stringArrayRemove($curves,$polyMeshes);
+    string $shorterList[] = stringArrayRemoveDuplicates($diff2);
+    //print($shorterList);
+    
+    string $shorterList2[];
+    //print($shorterList[0]);
+    int $x;
+    int $m=0;
+    clear $shorterList2;
+    for($x=0;$x<size($shorterList);$x++)
+    {
+        string $ctnl = substituteAllString($shorterList[$x], "Shape", "");  
+        if( `objExists $ctnl` )
+        {
+            string $nod = `nodeType $ctnl`;
+            if($nod == "transform")
+            {
+                if ($ctnl != " ")
+                {
+                    $shorterList2[$m] = $ctnl;
+                    $m = $m + 1;  
+                }
+            }  
+        }  
+    }    
+    //print ($shorterList2);
+    int $i=0;
+    //print($falutctrls);
+    string $falutctrls[];
+    clear $falutctrls;
+    int $z =0;
+    for($i=0;$i<size($shorterList2);$i++)
+    {
+        if( `objExists $shorterList2[$i]` )
+        {
+            //  print($shorterList2[$i]);
+            string  $chk1bm = check_transvs($shorterList2[$i]);
+            if ($chk1bm == "0")
+            {
+                $falutctrls[$z] = $shorterList2[$i];
+                // print($falutctrls[$z] + "\n");
+                $z = $z + 1;
+            }     
+        }    
+    }
+    //print($falutctrls);
+    return $falutctrls; 
+}  
+
+
+global proc int check_transvs(string $ctrlname)
+{
+    float $tx = 0;
+    float $ty = 0;
+    float $tz = 0;
+    
+    float $sx = 0;
+    float $sy = 0;
+    float $sz = 0;
+    
+    float $rx = 0;
+    float $ry = 0;
+    float $rz = 0 ;
+    
+    $tx = getAttr ($ctrlname + ".translateX");
+    $ty = getAttr ($ctrlname + ".translateY"); 
+    $tz = getAttr ($ctrlname + ".translateZ");
+    
+    $rx = getAttr ($ctrlname + ".rotateX");
+    $ry = getAttr ($ctrlname + ".rotateY"); 
+    $rz = getAttr ($ctrlname + ".rotateZ");
+    
+    $sx = getAttr ($ctrlname + ".scaleX");
+    $sy = getAttr ($ctrlname + ".scaleY"); 
+    $sz = getAttr ($ctrlname + ".scaleZ");
+    
+    int $finals = 0;
+    if ($tx == "0" && $ty == "0" && $tz == "0" && $rx == "0" && $ry == "0" && $rz == "0" && $sx == "1" && $sy == "1" && $sz == "1" )
+    {
+        $finals = 1;
+    }    
+    //print($finals + "," + $ctrlname + "\n");
+    return $finals;
+}
+
+
+//======================================================================
+//======================================================================
+// ---->  Check all empty groups  <----
+//======================================================================
+//======================================================================
+
+
+global proc check_empty_grps()
+{
+    text -e -l  "Checking Empty Gropus" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkemptygroup;
+    global string $check_emptygroup_files[]; 
+    clear $check_emptygroup_files;
+    int $chks = `checkBox -q -v checkboxemptygroup`;
+    if ($chks == 1) 
+    {  
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkemptygroup;
+        radioButton -e -bgc 1 0.933 0.459 checkemptygroup;     
+        return;
+    }   
+    textScrollList -e -ra info; 
+    string $emoty_grps[] = check_empty_group();
+    int $i=0;
+    int $x=0;
+    for($i=0;$i<size($emoty_grps);$i++)
+    {
+        textScrollList -e -a $emoty_grps[$i] info ;
+    }    
+    appendStringArray($check_emptygroup_files, $emoty_grps, size($emoty_grps));
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkemptygroup;
+        radioButton -e -bgc 1 0.463 0.463 checkemptygroup;
+    }   
+    if ($numitem == 0)
+    {
+        text -e -bgc 0.514 1 0.463 -l "Correct" checkemptygroup;
+        radioButton -e -bgc 0.514 1 0.463 checkemptygroup;
+    }     
+}    
+
+
+
+global proc string[] getGroup()
+{
+    string $getconstraint[] = `ls -type "constraint"`;
+    string $getplacetex[] = `ls -type "place3dTexture"`;
+    string $toremove[];
+    appendStringArray($toremove, $getconstraint, size($getconstraint)); 
+    appendStringArray($toremove, $getplacetex, size($getplacetex)); 
+    
+    string $diff[] = `ls -type "transform"`;
+    string $getTrs[] = stringArrayRemoveExact($toremove, $diff);
+    int $i = 0;
+    string $getGroup[];
+    for ($i = 0; size($getTrs) > $i; $i++) 
+    {
+        string $getShape[] = `listRelatives -s $getTrs[$i]`;
+        if (!size($getShape))
+        {
+            $getGroup[size($getGroup)] = $getTrs[$i] ;    
+        }
+    }
+    return $getGroup;
+}
+
+global proc string[] check_empty_group()
+{
+    string $grops[]=`getGroup`;
+    //  print($grops);
+    string $nmbds[] =`ls -type "joint"`;
+    string $diff[] = stringArrayRemove($nmbds,$grops);
+    //print($diff);
+    string $resultm[];
+    clear $resultm;
+    int $i=0;
+    int $z=0;
+    
+    int $progmex = size($diff);
+
+    for($i=0;$i<size($diff);$i++)
+    {
+        
+        progressBar -e -max $progmex -progress ($i+1)  progressChild;
+        text -e -l ($diff[$i] + "\t\t\t\t" + "   " + ($i+1) + "/" + $progmex) statuschild;
+        
+        string $conssm[]=`listRelatives -c $diff[$i]`;
+        select -hi $diff[$i];
+        string $nmss[] = `ls -sl`;
+        select -cl;
+        int $h = size($nmss);
+        // print($diff[$i] +   "," + $h  + "\n");
+        if ($h == 1)
+        { 
+            // print($diff[$i] + "\n");
+            string $nodtyp = `nodeType $diff[$i]`;
+            if ($nodtyp == "transform")
+            {
+                $resultm[$z] = $diff[$i];
+                $z = $z + 1;
+            }   
+        }     
+    }    
+    // print($resultm);
+    return $resultm;
+}    
+
+
+
+
+//======================================================================
+//======================================================================
+// ---->  check illigal name and _geo _grp name proper or not  <----
+//======================================================================
+//======================================================================
+
+
+
+
+global proc check_name_geo_grp()
+{
+    text -e -l  "Checking Naming of Objects" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkgeogrpname;
+    global string $check_duplicate_files[];
+    int $chks = `checkBox -q -v checkboxillnode`;
+    if ($chks == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkgeogrpname;
+        radioButton -e -bgc 1 0.933 0.459 checkgeogrpname;     
+        return;
+    }    
+    textScrollList -e -ra info; 
+    string $allGeoGrp[];
+    clear $allGeoGrp;
+    string $getgrp[] = getGroup_wrong_name();
+    string $getgeo[] = getGeo_wrong_name();
+    appendStringArray($allGeoGrp, $getgeo, size($getgeo)); 
+    appendStringArray($allGeoGrp, $getgrp, size($getgrp)); 
+    int $i=0;
+    for($i=0;$i<size($allGeoGrp);$i++)
+    {
+              textScrollList -e -a $allGeoGrp[$i] info ;
+    }    
+    appendStringArray($check_duplicate_files, $allGeoGrp, size($allGeoGrp)); 
+    //string $dupnames = check_duplicate_name();
+    string $buffer[];
+
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkgeogrpname;
+        radioButton -e -bgc 1 0.463 0.463 checkgeogrpname;
+    }   
+    if ($numitem == 0)
+    {
+        text -e  -bgc  0.514 1 0.463 -l "Correct" checkgeogrpname;
+        radioButton -e -bgc 0.514 1 0.463 checkgeogrpname;
+    }  
+}  
+
+
+global proc string[] getGroup_wrong_name()
+{
+    string $getTrs[] = getGroup();
+    string $getGroup[];
+    clear $getGroup;
+    
+    int $progmex = size($getTrs);
+
+    for ($i = 0; size($getTrs) > $i; $i++) 
+    {
+        
+        progressBar -e -max $progmex -progress ($i+1)  progressChild;
+        text -e -l ($getTrs[$i] + "\t\t\t\t" +  "Groups : " + $i + "/" + $progmex ) statuschild;
+        
+        string $longgrp[] = `ls -long $getTrs[$i]`;
+        //print $longgrp[0];
+        int $chk1 = `gmatch $getTrs[$i] "*_grp"`;
+        int $chk2 = `gmatch $getTrs[$i] "*_Grp"`;
+        int $chk3 = `gmatch $getTrs[$i] "*Ctrl*"`;
+        int $chk4 = `gmatch $getTrs[$i] "*_C_*"`;
+        int $chk = `gmatch $getTrs[$i] "group*"`;
+        int $chk5 = `gmatch $longgrp[0] "*|Main|*"`;
+        int $chk6 = `gmatch $longgrp[0] "*_proxy_model_grp|*"`;
+        int $chk7 = `gmatch $longgrp[0] "*_contact_model_grp|*"`;
+        if ($chk1 == 0 && $chk2 == 0  && $chk3 == 0 && $chk4 == 0 && $chk5 == 0 && $chk6 == 0 && $chk7 == 0 || $chk == 1)
+        {
+            $getGroup[size($getGroup)] = $getTrs[$i] ;
+        }
+    }
+    //print $getGroup;
+    return $getGroup;
+}
+
+
+global proc string[] getGeo_wrong_name()
+{
+    string $transforms[] = `ls -long -g`;
+    string $polyMeshes[] = `filterExpand -sm 12 $transforms`;
+    string $getWrngGeo[];
+    
+    int $progmex = size($polyMeshes);
+    int $amount = 0;
+    for ($mesh in $polyMeshes)
+    {
+        $amount++;
+        progressBar -e -max $progmex -progress $amount progressChild;
+        text -e -l ($mesh + "\t\t\t\t" + "  Mesh : " + $amount + "/" + $progmex  ) statuschild;
+            
+            int $chk = `gmatch $mesh "*pSphere*"`;
+            int $chk1 = `gmatch $mesh "*pCube*"`;
+            int $chk2 = `gmatch $mesh "*pCylinder*"`;
+            int $chk3 = `gmatch $mesh "*pCone*"`;
+            int $chk4 = `gmatch $mesh "*pPlane*"`;
+            int $chk5 = `gmatch $mesh "*pTorus*"`;
+            int $chk6 = `gmatch $mesh "*pPyramid*"`;
+            int $chk7 = `gmatch $mesh "*pPipe*"`;
+            int $chk8 = `gmatch $mesh "*_geo"`;
+            
+            if ($chk == 1 || $chk1 == 1 ||$chk2 == 1 ||$chk3 == 1 ||$chk4 == 1 ||$chk5 == 1 ||$chk6 == 1 || $chk7 == 1 || $chk8 == 0)
+            {
+                 $getWrngGeo[size($getWrngGeo)] = $mesh ;
+            }
+    }
+     return $getWrngGeo;
+}
+
+//======================================================================
+//======================================================================
+// ---->  check duplicate names  <----
+//======================================================================
+//======================================================================
+
+
+global proc checkduplicatenames()
+{
+    text -e -l  "Checking Duplicate Names" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkunwanteduplicatenode;
+    global string  $check_duplicate_files_sep[];
+
+    textScrollList -e -ra info; 
+    int $chksl = `checkBox -q -v checkboxduplicatenode`;
+    if ($chksl == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkunwanteduplicatenode;
+        radioButton -e -bgc 1 0.933 0.459 checkunwanteduplicatenode;     
+        return;
+    }    
+    string $dupnames = check_duplicate_name_sep2();
+    string $buffer[];
+    $numTokens = `tokenize $dupnames "," $buffer`;
+    $i=0;
+    int $x;
+    for($i=0;$i<size($buffer);$i++)
+    {
+        if ($buffer[$i] != "")
+        {  
+            textScrollList -e -a $buffer[$i] info ;
+            $check_duplicate_files_sep[$x] = $buffer[$i] ;
+            $x = $x + 1 ;
+        }
+    }    
+    //appendStringArray($check_duplicate_files, $buffer, size($buffer));
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkunwanteduplicatenode;
+        radioButton -e -bgc 1 0.463 0.463 checkunwanteduplicatenode;
+    }   
+    if ($numitem == 0)
+    {
+        text -e  -bgc  0.514 1 0.463 -l "Correct" checkunwanteduplicatenode;
+        radioButton -e -bgc 0.514 1 0.463 checkunwanteduplicatenode;
+    }   
+}
+
+
+global proc string check_duplicate_name_sep2()
+{
+    string $res = "";
+    string $transforms[] = `ls -type mesh`;
+    string $abc2[] = `filterExpand  -sm 12 $transforms`;
+    string $abc2x[] =`sort $abc2`;
+    int $i=0;
+    string $ulist[];
+    int $z=0;
+    
+    int $progmex = (size($abc2));
+    
+    for($i=0;$i<size($abc2);$i++)
+    {
+        
+        progressBar -e -max $progmex -progress ($i+1)  progressChild;
+        text -e -l ( $abc2[$i] + "\t\t\t\t" + "   " + ($i+1) + "/" + $progmex   ) statuschild;
+        
+        string $bn = `nodeType $abc2[$i]`;
+        string $buffer[];
+        $numTokens = `tokenize $abc2[$i] "|" $buffer`;  
+        $ulist[$z] = ($buffer[size($buffer)-1]);
+        $z = $z + 1;
+    }  
+    select -cl;
+    string $objselect[];
+    int $m=0;
+    
+    int $progmexa = size($ulist);
+    
+    for($i=0;$i<size($ulist);$i++)
+    {
+        
+        progressBar -e -max $progmexa -progress ($i+1)  progressChild;
+        text -e -l ( $ulist[$i] + "\t\t\t\t" + "   " + ($i+1) + "/" + $progmexa   ) statuschild;
+        
+        int $count = stringArrayCount($ulist[$i], $ulist);
+        if ($count > 1)
+        {
+            int $chk = `gmatch $ulist[$i] "*Geo"`;
+            if ($chk == 0)
+            {
+                $objselect[$m] = $abc2[$i];
+                $m = $m + 1;
+            }
+        }  
+    }
+    
+    //print($objselect);
+    select -cl;
+    catchQuiet(`select -r $objselect`);   
+    string $obj[]=`ls -sl`; 
+    //print($obj);
+    select -cl;
+    if (size($obj) > 0)
+    {
+        for ($i=0;$i<size($obj);$i++)
+        {
+            $res = $res + "," + $obj[$i]; 
+        }   
+    }
+    return $res;
+}
+
+
+//======================================================================
+//======================================================================
+// ---->  Check for illegal shading names  <----
+//======================================================================
+//======================================================================    
+    
+
+global proc string getonlychar(string $chr)
+{
+    string $ch;
+    $ch = $chr;
+    if(endsWith($chr,"0")|| endsWith($chr,"1") || endsWith($chr,"2") || endsWith($chr,"3") || endsWith($chr,"4") || endsWith($chr,"5") || endsWith($chr,"6") || endsWith($chr,"7") || endsWith($chr,"8") || endsWith($chr,"9"))
+    {
+        $ch = `substring $chr 1 (size($chr)- 1)`;
+        if(endsWith($ch,"0")|| endsWith($ch,"1") || endsWith($ch,"2") || endsWith($ch,"3") || endsWith($ch,"4") || endsWith($ch,"5") || endsWith($ch,"6") || endsWith($ch,"7") || endsWith($ch,"8") || endsWith($ch,"9"))
+        {
+            $ch = getonlychar(`substring $chr 1 (size($chr)-1)`);
+        }
+    }
+    return $ch;
+}
+
+
+
+global proc check_same_naming_shaders()
+{
+    text -e -l  "Checking illigal Shading Names" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkillshadingnode; 
+    global string $check_same_naming_shd_files[];
+    int $chks = `checkBox -q -v checkboxillshadingnode`;
+    if ($chks == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkillshadingnode;
+        radioButton -e -bgc 1 0.933 0.459 checkillshadingnode;     
+        return;
+    }    
+    string $shaders[]=`ls -mat`;
+    string $matshd[];
+    $shaders = sort($shaders);
+    textScrollList -e -ra info; 
+    //print($shaders);
+    int $i=0;
+    int $progmex = size($shaders);
+    for($i=0;$i<size($shaders);$i++)
+    {
+        progressBar -e -max $progmex -progress ($i+1) progressChild;
+        text -e -l ( $shaders[$i] + "\t\t\t\t" + "   " + ($i+1) + "/" + $progmex   ) statuschild;
+        string $nms = `getonlychar $shaders[$i]`;
+        $matshd[$i] = $nms;
+    }    
+    //print($matshd);
+    int $z=0;
+    int $x =0;
+    for($z=0;$z<size($matshd);$z++)
+    {
+        int $count = stringArrayCount($matshd[$z], $matshd);
+        if ($count > 1)
+        {
+            //print($shaders[$z] + "," + $count + "\n");
+            textScrollList -e -a $shaders[$z] info ;
+            $check_same_naming_shd_files[$x] = $shaders[$z] ;
+            $x = $x + 1;
+        }
+    }
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkillshadingnode;
+        radioButton -e -bgc 1 0.463 0.463 checkillshadingnode;
+    }   
+    if ($numitem == 0)
+    {
+        text -e  -bgc  0.514 1 0.463 -l "Correct" checkillshadingnode;
+        radioButton -e -bgc 0.514 1 0.463 checkillshadingnode;
+    }   
+}
+
+
+
+//======================================================================
+//======================================================================
+// ---->  check_Global_Scale_value  <----
+//======================================================================
+//====================================================================== 
+
+
+
+
+global proc check_Global_Scale_value()
+{
+    global string $check_global_scale_files[];
+    int $chks = `checkBox -q -v checkboxzeroscaleattr`;
+    if ($chks == 1) 
+    { 
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkzeroscaleattr;
+        radioButton -e -bgc 1 0.933 0.459 checkzeroscaleattr;     
+        return;
+    }    
+    int $x =0;
+    textScrollList -e -ra info; 
+    string $masterctrls[] = `ls {"Master_Ctrl"}`;
+    if (size($masterctrls) == 0)
+    {
+        textScrollList -e -a "No master Control Found" info ;
+        $check_global_scale_files[$x] = "No master Control Found";
+        radioButton -e -bgc 0.514 1 0.463 checkzeroscaleattr;  
+        return;
+    }
+    int $glscale=`getAttr ($masterctrls[0] + ".GlobalScale")`;
+    if($glscale != 1)
+    {   
+        textScrollList -e -a "Global scale Not Correct" info ;
+        radioButton -e -bgc 1 0.463 0.463 checkzeroscaleattr;   
+        $check_global_scale_files[$x] = "Global scale Not Correct";
+    }
+    
+    if($glscale == 1)
+    {
+        textScrollList -e -a "Correct.." info ;
+        radioButton -e -bgc 0.514 1 0.463 checkzeroscaleattr; 
+        $check_global_scale_files[$x] = "Correct..";  
+    }
+}
+
+
+
+//======================================================================
+//======================================================================
+// ---->  check anim key on ctrls   <----
+//======================================================================
+//====================================================================== 
+
+
+global proc checkkeyonctrls()
+{
+    text -e -l  "Checking Anim Keys" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkforanimkeys;
+    global string $check_key_on_files[];
+    int $chks = `checkBox -q -v checkboxforanimkeys`;
+    if ($chks == 1) 
+    {  
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkforanimkeys;
+        radioButton -e -bgc 1 0.933 0.459 checkforanimkeys;     
+        return;
+    }    
+    string $transforms[] = `ls -tr`;
+    string $polyMeshes[] = `filterExpand -sm 9 $transforms`;
+    string $curves[] = `ls {"curve*"}`;
+    string $diff2[] = stringArrayRemove($curves,$polyMeshes);
+    string $shorterList[] = stringArrayRemoveDuplicates($diff2);
+    textScrollList -e -ra info; 
+    string $shorterList2[];
+    int $x;
+    int $m=0;
+    clear $shorterList2;
+    
+    int $progmex = size($shorterList);
+    for($x=0;$x<size($shorterList);$x++)
+    {
+        progressBar -e -max $progmex -progress ($x+1) progressChild;
+        text -e -l ( $shorterList[$x] + "\t\t\t\t" + "   " + ($x+1) + "/" + $progmex   ) statuschild;
+        string $ctnl = substituteAllString($shorterList[$x], "Shape", "");  
+        if( `objExists $ctnl` )
+        {
+            string $nod = `nodeType $ctnl`;
+            if($nod == "transform")
+            {
+                $shorterList2[$m] = $ctnl;
+                $m = $m + 1;  
+            }   
+        }  
+    }   
+    //print($shorterList2);
+    $shorterList2 = sort($shorterList2);
+    string $shorterList3[] = stringArrayRemoveDuplicates($shorterList2);
+    int $z=0;
+    $x = 0;
+    for($z=0;$z<size($shorterList3);$z++)
+    {
+        int $chk = `keyframe  -q -kc $shorterList3[$z]`;
+        if ($chk > 0)
+        {
+            textScrollList -e -a $shorterList3[$z] info ; 
+            $check_key_on_files[$x] = $shorterList3[$z];
+            $x = $x + 1 ;
+        }    
+    }
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkforanimkeys;
+        radioButton -e -bgc 1 0.463 0.463 checkforanimkeys;
+    }   
+    if ($numitem == 0)
+    {
+        text -e  -bgc  0.514 1 0.463 -l "Correct" checkforanimkeys;
+        radioButton -e -bgc 0.514 1 0.463 checkforanimkeys;
+    }   
+}    
+
+
+//======================================================================
+//======================================================================
+// ---->  check shape end with num  <----
+//======================================================================
+//====================================================================== 
+
+
+global proc checkshapeendwithnum()
+{
+    text -e -l  "Checking Shape end with Number" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkshapeendwithnumnode;
+    global string  $check_shape_end_num_files[];
+    textScrollList -e -ra info; 
+    int $chksl = `checkBox -q -v checkshapeendnode`;
+    if ($chksl == 1) 
+    { 
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkshapeendwithnumnode;
+        radioButton -e -bgc 1 0.933 0.459 checkshapeendwithnumnode;     
+        return;
+    }    
+    string $dupnames = check_Name_end();
+    string $buffer[];
+    $numTokens = `tokenize $dupnames "," $buffer`;
+    $i=0;
+    int $x;
+    for($i=0;$i<size($buffer);$i++)
+    {
+        if ($buffer[$i] != "")
+        {  
+            textScrollList -e -a $buffer[$i] info ;
+            $check_shape_end_num_files[$x] = $buffer[$i] ;
+            $x = $x + 1 ;
+        }
+    }    
+    //appendStringArray($check_duplicate_files, $buffer, size($buffer));
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkshapeendwithnumnode;
+        radioButton -e -bgc 1 0.463 0.463 checkshapeendwithnumnode;
+    }   
+    if ($numitem == 0)
+    {
+        text -e   -bgc 0.514 1 0.463 -l "Correct" checkshapeendwithnumnode;
+        radioButton -e -bgc 0.514 1 0.463 checkshapeendwithnumnode;
+    }   
+}
+
+
+
+global proc string check_Name_end()
+{
+    string $res = "";
+    // pickWalk -d Up;  
+    string $abc2[] = `ls -long -type shape`; 
+    //print($abc2);
+    select -cl; 
+    int $i=0;
+    string $ulist[];
+    int $z=0;
+    int $progmex = size($abc2);
+    for($i=0;$i<size($abc2);$i++)
+    {
+        
+        progressBar -e -max $progmex -progress ($i+1)  progressChild;
+        text -e -l ( $abc2[$i] + "\t\t\t\t" + "   " + ($i+1) + "/" + $progmex   ) statuschild;
+        
+        int $cht = `gmatch $abc2[$i] ("*" + "Orig" + "*")`;
+        if($cht == 0)
+        {
+            string $bn = `nodeType $abc2[$i]`;
+            if ($bn == "mesh")
+            {
+                if(endsWith($abc2[$i],"0")|| endsWith($abc2[$i],"1") || endsWith($abc2[$i],"2") || endsWith($abc2[$i],"3") || endsWith($abc2[$i],"4") || endsWith($abc2[$i],"5") || endsWith($abc2[$i],"6") || endsWith($abc2[$i],"7") || endsWith($abc2[$i],"8") || endsWith($abc2[$i],"9"))
+                {
+                    $ulist[$z] = $abc2[$i];
+                    $z = $z + 1; 
+                }   
+            }
+        }  
+    }
+    // print( $ulist);  
+    if (size($ulist) > 0)
+    {
+        for ($i=0;$i<size($ulist);$i++)
+        {
+            $res = $res + "," + $ulist[$i];
+        }
+    }
+   // print($res);
+    return $res;  
+}
+
+
+
+
+//======================================================================
+//======================================================================
+// ---->  Fix_End_with_number  <----
+//======================================================================
+//====================================================================== 
+
+
+global proc Fix_End_with_number()
+{  
+    global string  $check_shape_end_num_files[];
+    //print($check_shape_end_num_files);
+    int $i=0;
+    for($i=0;$i<size($check_shape_end_num_files);$i++)
+    {
+        string $shapenode = $check_shape_end_num_files[$i];
+        string $buffer[];
+        $numTokens = `tokenize $shapenode "|" $buffer`;
+        string $shapenodenm = $buffer[size($buffer)-1];
+        string $result = substituteAllString($shapenodenm, "Shape", "");
+        string $newname = $result  + "Shape";
+        //print($shapenode + "," + $newname + "\n");
+        catchQuiet(`rename  $shapenode $newname`);
+    }
+    //print($check_shape_node_match_trans_files);
+    //checkshapenodematchwithtrans;
+    checkshapeendwithnum;
+    text -e -l "Fixed" statusmain;
+    text -e -l "" statuschild;
+}    
+
+
+
+
+global proc Fix_To_match_node()
+{
+    global string  $check_shape_node_match_trans_files[];
+    int $i=0;
+    for($i=0;$i<size($check_shape_node_match_trans_files);$i++)
+    {
+        string $buffer[];
+        $numTokens = `tokenize $check_shape_node_match_trans_files[$i] " <> " $buffer`;
+        string $transformnode = $buffer[0];
+        string $shapenode = $buffer[1];
+        string $bufferm[];
+        $numTokens = `tokenize $shapenode "|" $bufferm`;
+        string $shapenodex = $bufferm[size($bufferm)-1];
+        //string $newname =  substituteAllString($shapenodex, "Shape", "");
+        string $newname = $buffer[0] + "Shape";
+        //print($transformnode + "," + $newname + "\n");
+        catchQuiet(`rename $shapenode $newname`);
+    }
+    //print($check_shape_node_match_trans_files);
+    Fix_End_with_number;
+    //checkshapeendwithnum;
+    checkshapenodematchwithtrans;
+    text -e -l "Fixed" statusmain;
+    text -e -l "" statuschild;
+}    
+
+
+global proc checkshapenodematchwithtrans()
+{   
+    text -e -l  "Checking Shape with Transform nodes" statusmain;
+    radioButton -e -bgc 0.2 0.2 0.5 checkshapematchtransmnode;
+    global string  $check_shape_node_match_trans_files[];
+    textScrollList -e -ra info; 
+    int $chksl = `checkBox -q -v checkshapenamematchnode`;
+    if ($chksl == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkshapematchtransmnode;
+        radioButton -e -bgc 1 0.933 0.459 checkshapematchtransmnode;     
+        return;
+    }    
+    string $dupnames = check_Shape_Name_Not_Match_node();
+    string $buffer[];
+    $numTokens = `tokenize $dupnames "," $buffer`;
+    $i=0;
+    int $x; 
+    for($i=0;$i<size($buffer);$i++)
+    {
+        if ($buffer[$i] != "")
+        {  
+            textScrollList -e -a $buffer[$i] info ;
+            $check_shape_node_match_trans_files[$x] = $buffer[$i] ;
+            $x = $x + 1 ;
+        }
+    }    
+    //appendStringArray($check_duplicate_files, $buffer, size($buffer));
+    int $numitem =`textScrollList -q -ni info`;
+    if ($numitem > 0)
+    {
+        text -bgc 1 0.463 0.463 -e -l $numitem checkshapematchtransmnode;
+        radioButton -e -bgc 1 0.463 0.463 checkshapematchtransmnode;
+    }   
+    if ($numitem == 0)
+    {
+       text -e   -bgc 0.514 1 0.463 -l "Correct" checkshapematchtransmnode;
+        radioButton -e -bgc 0.514 1 0.463 checkshapematchtransmnode;
+    }   
+}
+
+
+
+global proc string check_Shape_Name_Not_Match_node()
+{
+    string $res = "";
+    // pickWalk -d Up;  
+    string $abc2[] = `ls -long -type shape`; 
+    //print($abc2);
+    select -cl; 
+    int $i=0;
+    string $ulist[];
+    int $z=0;
+    int $progmex = size($abc2);
+    for($i=0;$i<size($abc2);$i++)
+    {
+        progressBar -e -max $progmex -progress ($i+1)  progressChild;
+        text -e -l ( $abc2[$i] + "\t\t\t\t" + "   " + ($i+1) + "/" + $progmex   ) statuschild;
+        int $cht2 = `gmatch $abc2[$i] ("*" + "Ctrl" + "*")`;
+        int $cht = `gmatch $abc2[$i] ("*" + "Orig" + "*")`;
+        if($cht2 == 0)
+        {
+            if($cht == 0)
+            {
+                string $bn = `nodeType $abc2[$i]`;
+                if ($bn == "mesh")
+                {
+                    string $transnodes[] = `listRelatives  -type transform -parent $abc2[$i]`;  
+                    string $bufferld[];
+                    $numTokens = `tokenize $abc2[$i] "|" $bufferld`;
+                    string $matsh = $bufferld[size($bufferld)-1];
+                    int $chnk = startsWith($matsh, $transnodes[0]);
+                    if($chnk == 0)
+                    {  
+                        $ulist[$z] = $transnodes[0] + " <> " +  $abc2[$i];
+                        $z = $z + 1; 
+                    }   
+                }
+            }  
+        }
+    }
+    // print( $ulist);  
+    if (size($ulist) > 0)
+    {
+    for ($i=0;$i<size($ulist);$i++)
+        {
+            $res = $res + "," + $ulist[$i];
+        } 
+    }
+    //print($res);   
+    return $res; 
+}
+
+
+//======================================================================
+//======================================================================
+// ---->    <----
+//======================================================================
+//====================================================================== 
+
+
+
+global proc sel_item_num()
+{
+    string $items[] = `textScrollList -q -si info`;
+    catchQuiet (`select -r $items`);
+}
+
+
+global proc sel_items()
+{
+    catchQuiet (`sel_item_num`);
+}
+
+
+global proc msssg()
+{
+    text -e -l "Checking Finished" statusmain;
+    text -e -l "" statuschild;
+    confirmDialog -title "Confirm" -message "Asset Scan Completed...!"
+    -button "OK" -defaultButton "Ok"  -cancelButton "Ok" ;
+}    
+   
+    
+global proc update_array(string $arrname[])
+{   
+    textScrollList -e -ra info; 
+    int $i = 0;
+    for($i=0;$i<size($arrname);$i++)
+    {
+        if ($arrname[$i] != "")
+        {
+            textScrollList -e -a $arrname[$i] info ;   
+        }
+    }        
+}    
+
+
+global proc fill_value(string $v)
+{
+   // global string $check_value;   
+    //$check_value = $v;
+    evalDeferred -lp $v; 
+    //print ($v+"\n");
+}    
+
+
+global proc remove_unload_references()
+{
+    string $refss[]=`file -q -r `;
+    int $ks=0;
+    for($ks=0;$ks<size($refss);$ks++)
+    {
+        int $chk = `referenceQuery  -il $refss[$ks]`;
+        // print($chk + "\n");
+        if($chk == 0)
+        {
+            file -rr  $refss[$ks];
+        }
+    } 
+}
+
+
+//======================================================================
+//======================================================================
+// ---->  cleen unwanted nodes   <----
+//======================================================================
+//====================================================================== 
+
+global proc clean_unwanted_nodes()
+{
+    global string $check_unwantednode_files[];
+    int $chks = `checkBox -q -v checkboxunwantednode`;
+    if ($chks == 1) 
+    {
+        text -e  -bgc  1 0.933 0.459 -l "Ignored" checkunwantednode;
+        radioButton -e -bgc 1 0.933 0.459 checkunwantednode;     
+        return;
+    }    
+    int $x = 0;
+    textScrollList -e -ra info; 
+    catchQuiet(hyperShadePanelMenuCommand("hyperShadePanel1", "deleteUnusedNodes"));
+    textScrollList -e -a "Delete Unused Shaders Done..." info ;
+    string $unknow[]=`ls -type "unknown"`;
+    //delete $unkonow;
+    int $i=0;
+    for($i=0;$i<size($unknow);$i++)
+    {
+        catchQuiet (`lockNode -lock off $unknow[$i]`);
+        catchQuiet (`delete $unknow[$i]`);
+        textScrollList -e -a ($unknow[$i] + " Deleted...") info ;
+    }
+    $check_unwantednode_files[$x] = $unknow[$i] + " Deleted...";
+    remove_unload_references();
+    textScrollList -e -a ($unknow[$i] + " Remove unload Reference node Done...") info ;
+    $check_unwantednode_files[$x + 1] = " Remove unload Reference node Done...";
+    radioButton -e -bgc 0.514 1 0.463 checkunwantednode;
+} 
+

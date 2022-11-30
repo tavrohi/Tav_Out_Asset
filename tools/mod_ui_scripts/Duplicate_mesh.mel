@@ -1,0 +1,185 @@
+
+global proc dupmeshui()
+{
+	windowPref - ra;
+	if (`window -exists dupi`) deleteUI dupi;
+	window -s 1 -rtf 1 -t "Duplicate Mesh" -widthHeight 300 300  dupi;
+	columnLayout -adjustableColumn true;
+	textScrollList -w 295 -h 295 -allowMultiSelection true -doubleClickCommand Dupile searchText;	
+	textScrollList -w 295 -h 295 -allowMultiSelection true -doubleClickCommand Dupilec shapeText;	
+	popupMenu ;
+	menuItem  -l"SelectAll" -c"selectsab";
+	menuItem -l "Rename Shape Node" -c "ChangeName ";
+	showWindow dupi;
+	carz_Duplicate;
+}
+
+
+
+global proc ChangeName()
+{
+	string $seltxt[]=`textScrollList -q -si shapeText`;
+	int $i;
+	for ($shus in $seltxt)
+	{
+	catch(`	select -r ("*"+$shus+"*")`);	
+		string $arre[]=`ls-sl`;
+		for ($a in $arre)
+		{
+		//rename $a  ($a+$i);
+		//print ($a+$i);
+		string $baap[]=`listRelatives -ap $a`;
+		catch(`rename  $a  ($baap[0]+"Shape")`);
+		print "Gone "	;
+		}
+		textScrollList-e -ri $shus shapeText; 	
+	}
+
+		
+	
+}
+
+
+global proc carz_Duplicate()
+{
+	
+	string $objes[] = `ls -sn`,
+	$obj;
+	string $atoks[];	
+	string $temp[], $result[0];
+       string $objectsS[], $objectS;
+	int $num=0, $dupi[];
+	int $i, $j, $k, $it=0;
+       
+	for($object in $objes)
+	{
+		$objectsS[$num] = sdDuplicateNodes($objes[$num]);
+		$num++;
+	}
+
+	$temp=$objectsS;
+	waitCursor -state on;
+	for($i=0; $i< $num; $i++)
+	{
+		if($dupi[$i]!=1)
+		{
+			if($it++==100)
+			{
+				print (($i+1) + " of " + $num + "\n");
+                           
+				print ("Duplicate Names found: " + $k + "\n");
+
+                          
+				$it=0;
+
+			}
+
+			for($j=$i+1; $j< $num; $j++)
+			{
+				if(($temp[$i]==$temp[$j])&&($dupi[$i]!=1))
+				{
+					$result[$k] = $objes[$i];
+					$dupi[$i]=1;
+					$dupi[$j]=1;
+					$k++;
+				}
+			}
+		}
+	}
+	waitCursor -state off;
+
+	if($k == 0)
+	{
+	confirmDialog -title "Confirm" -message "No Duplicates Found" -button "Ok"  ;
+	deleteUI dupi;
+		
+	}
+	else
+	{
+
+	}
+	string $res[]=$result;
+	string $col;
+
+	for($him in $res)
+	{
+	int $dd = `tokenize $him "|" $atoks`;
+	string $latvalue=$atoks[$dd -1];
+	print $latvalue;
+	string $yesit=`nodeType  $him`;
+	if(($yesit=="mesh")||($yesit=="nurbsCurve")||($yesit=="camera"))
+	{
+		$coll =`textScrollList -e -a $atoks[$dd -1] shapeText`;
+	}
+	else
+	{
+	 $col =`textScrollList -e -a $atoks[$dd -1] searchText`;
+	}
+
+	}
+	string $allitmshape[]=`textScrollList -q -ai shapeText`;
+	string $shorterListed[] = stringArrayRemoveDuplicates($allitmshape);
+	textScrollList -e -ra shapeText;
+	for ($shorted in $shorterListed)
+	{
+		textScrollList -e -a $shorted   shapeText;
+	}
+
+}
+
+global proc string sdDuplicateNodes(string $object)
+{
+	int $items;
+	string $buffer[];
+
+	$items = `tokenize $object "|" $buffer`;
+	$object=$buffer[$items-1];
+
+	return $object;
+}
+
+global proc selectsab()
+{
+	string $allitms[]=`textScrollList -q -ai  shapeText`;
+	for ($all in $allitms)
+	{
+		textScrollList -e -si $all  shapeText;
+	}
+		
+}
+
+global proc Dupile()
+{
+	string $sele[] = `textScrollList -q  -selectItem searchText`;
+	string $selthem = 	"select -r  " + "(" + "\"" +  "*" +  $sele[0] + "*" + "\"" + ");";
+	eval($selthem);
+	string $yuu[]=`getPanel -vis`;
+	for($ye in $yuu )
+	{
+		if($ye=="outlinerPanel*")
+		{OutlinerEdMenuCommand outlinerPanel1;
+	}
+		else{}
+	}
+	FrameSelected;
+	//FrameSelected;
+	}
+		global proc Dupilec()
+	{
+		string $seler[] = `textScrollList -q  -selectItem shapeText`;
+		string $selthemm = 	"select -r  " + "(" + "\"" +  "*" +  $seler[0] + "*" + "\"" + ");";
+		eval($selthemm);
+		string $yuur[]=`getPanel -vis`;
+		for($we in $yuur )
+		{
+			if($we=="outlinerPanel*")
+			{OutlinerEdMenuCommand outlinerPanel1;
+		}
+			else{}
+		}
+		FrameSelected;
+		//FrameSelected;
+	}
+
+
+
