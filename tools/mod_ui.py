@@ -7,7 +7,7 @@ import inspect
 import __main__
 import mod_ui_scripts.UVTransfer as uvTrans
 import mod_ui_scripts.Shading_Network_Renamer as shdrename
-import tools.mod_ui_scripts.showxml
+import tools.showxml
 # import tools.pub_ui
 
 WINDOW_SIDE_TITLE = "Modelling Tools"
@@ -20,8 +20,8 @@ def windes():
     cmds.text(label=WINDOW_DISPLAY_TEXT, align='center', font='boldLabelFont')
     cmds.text(l="",h=10)
     
-    cmds.button(label = "Modeling CheckList", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/Assets_Publisher.mel\"; CheckListUi;')")
-    # cmds.button(label = "Publishing Tool", width=200, bgc=(0.1,0.1,0.1), c=launchpubui)
+    cmds.button(label = "Modeling CheckList", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Assets_Publisher.mel\"; CheckListUi;')")
+    cmds.button(label = "Publishing Tool", width=200, bgc=(0.1,0.1,0.1), c=launchpubui)
     
     cmds.rowLayout(nc=4, width=200)
     cmds.button(label = "CP", width=49, bgc=(0.1,0.1,0.1), c="maya.cmds.xform(cpc=1)")
@@ -49,22 +49,22 @@ def windes():
     
     cmds.frameLayout(label='Smooth Options', cll=1, cl=0, lv=1, w=200)
     cmds.columnLayout(w=200, adjustableColumn=1)
-    cmds.button(label = "Set All Default Smooth", bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/Default_smooth.mel\"; set_smooth_default;')")
-    cmds.button(label = "Select All Polysmooth mesh", bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/xtras.mel\"; slctsmthmsh;')")
+    cmds.button(label = "Set All Default Smooth", bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Default_smooth.mel\"; set_smooth_default;')")
+    cmds.button(label = "Select All Polysmooth mesh", bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/xtras.mel\"; slctsmthmsh;')")
     cmds.rowLayout(nc=3, width=200)
     cmds.text(label="Remove Polysmooth", font='tinyBoldLabelFont')
-    cmds.button(label = "Selected", bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/xtras.mel\"; asDelSelPS;')")
-    cmds.button(label = "All Mesh", bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/xtras.mel\"; asDelAllPS;')")
+    cmds.button(label = "Selected", bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/xtras.mel\"; asDelSelPS;')")
+    cmds.button(label = "All Mesh", bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/xtras.mel\"; asDelAllPS;')")
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
     
     cmds.frameLayout(label='Face Selection', cll=1, cl=0, lv=1, w=200)
     cmds.rowLayout(nc=4, width=200)
-    cmds.button(label = "Triangles", w=58, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/xtras.mel\"; polyselectcon(\"tri\");')")
-    cmds.button(label = "Quads", w=58, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/xtras.mel\"; polyselectcon(\"qua\");')")
-    cmds.button(label = "Nsided", w=58, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/xtras.mel\"; polyselectcon(\"nside\");')")
-    cmds.symbolButton(ann = "Refresh all Selection", bgc=(0.1,0.1,0.1), w=18, h=18, image="refresh.png", c="maya.mel.eval('source \"mod_ui_scripts/xtras.mel\"; polyselectcon(\"refresh\");')")
+    cmds.button(label = "Triangles", w=58, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/xtras.mel\"; polyselectcon(\"tri\");')")
+    cmds.button(label = "Quads", w=58, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/xtras.mel\"; polyselectcon(\"qua\");')")
+    cmds.button(label = "Nsided", w=58, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/xtras.mel\"; polyselectcon(\"nside\");')")
+    cmds.symbolButton(ann = "Refresh all Selection", bgc=(0.1,0.1,0.1), w=18, h=18, image="refresh.png", c="maya.mel.eval('source \"tools/mod_ui_scripts/xtras.mel\"; polyselectcon(\"refresh\");')")
     cmds.setParent('..')
     cmds.setParent('..')
     
@@ -73,13 +73,13 @@ def windes():
     cmds.columnLayout(w=200, adjustableColumn=1)
     cmds.rowLayout(nc=3, width=200)
     cmds.text(label="Set CVs \'0\'", w=69, font='tinyBoldLabelFont')
-    cmds.button(label = "Selected", w=64, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/xtras.mel\"; scva;')")
+    cmds.button(label = "Selected", w=64, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/xtras.mel\"; scva;')")
     cmds.button(label = "All Mesh", w=64, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"cvz\")"))
     cmds.setParent('..')
-    cmds.button(label = "Check Duplicate Mesh", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/Duplicate_mesh.mel\"; dupmeshui;')")
-    cmds.button(label = "abSymMesh", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/abSymMesh.mel\"; abSymMesh;')")
-    cmds.button(label = "Rename", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/RenameScript.mel\"; cometRename;')")
-    cmds.button(label = "Duplicate Auto Rename", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/Duplicate_Auto_Rename.mel\"; autodupwin;')")
+    cmds.button(label = "Check Duplicate Mesh", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Duplicate_mesh.mel\"; dupmeshui;')")
+    cmds.button(label = "abSymMesh", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/abSymMesh.mel\"; abSymMesh;')")
+    cmds.button(label = "Rename", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/RenameScript.mel\"; cometRename;')")
+    cmds.button(label = "Duplicate Auto Rename", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Duplicate_Auto_Rename.mel\"; autodupwin;')")
     cmds.button(label = "UV Transfer", width=200, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"uvtrans\")"))
     cmds.setParent('..')
     cmds.setParent('..')
@@ -87,19 +87,19 @@ def windes():
     cmds.frameLayout(label='Shader Tools', cll=1, cl=0, lv=1, w=200)
     cmds.columnLayout(w=200, adjustableColumn=1)
     cmds.button(label = "Rename Shading Network", width=200, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"shdrename\")"))
-    cmds.button(label = "FTM", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/FileTextureManager.mel\"; FileTextureManager_2018;')")
-    cmds.button(label = "Material List", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/Material_List.mel\"; NameSceneUI;')")
-    cmds.button(label = "Basic Shader\'s", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/Basic_shader.mel\"; defaultshaderwin;')")
-    cmds.button(label = "Remove Duplicate Shader", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/Remove_Duplicate_Shader.mel\"; clean_Shaders;')")
+    cmds.button(label = "FTM", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/FileTextureManager.mel\"; FileTextureManager_2018;')")
+    cmds.button(label = "Material List", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Material_List.mel\"; NameSceneUI;')")
+    cmds.button(label = "Basic Shader\'s", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Basic_shader.mel\"; defaultshaderwin;')")
+    cmds.button(label = "Remove Duplicate Shader", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Remove_Duplicate_Shader.mel\"; clean_Shaders;')")
     cmds.button(label = "Remove Unused Shader", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('MLdeleteUnused;')")
     cmds.setParent('..')
     cmds.setParent('..')
     
     cmds.frameLayout(label='File Cleening', cll=1, cl=0, lv=1, w=200)
     cmds.columnLayout(w=200, adjustableColumn=1)
-    cmds.button(label = "FINALIZE", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/Finalize.mel\"; finalizze;')")
-    cmds.button(label = "Clean File", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"mod_ui_scripts/Clean_FIle.mel\"; CleenFilewin;')")
-    cmds.button(label = "CLOSE EDITORS / BOUNDING BOX", width=200, bgc=(0.22, 1.0, 0.09), c="maya.mel.eval('source \"mod_ui_scripts/xtras.mel\"; Clean_Editors;')")
+    cmds.button(label = "FINALIZE", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Finalize.mel\"; finalizze;')")
+    cmds.button(label = "Clean File", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Clean_FIle.mel\"; CleenFilewin;')")
+    cmds.button(label = "CLOSE EDITORS / BOUNDING BOX", width=200, bgc=(0.22, 1.0, 0.09), c="maya.mel.eval('source \"tools/mod_ui_scripts/xtras.mel\"; Clean_Editors;')")
     cmds.setParent('..')
     cmds.setParent('..')
 
