@@ -1,0 +1,29 @@
+
+global proc Ui()
+{
+string $window = `window -title "Default Smooth" -iconName "Short Name"  -widthHeight 200 55`;
+columnLayout -adjustableColumn true;
+button -label "Set Default Smooth" -command ("set_smooth_default");
+setParent ..;
+showWindow $window;
+}
+
+
+global proc set_smooth_default()
+{
+string $shapes[]= `ls -type shape`;
+int $i=0;
+
+for($i=0;$i<size($shapes);$i++)
+{
+    catchQuiet(`setAttr -l false ($shapes[$i] + ".smoothLevel")`);
+    catchQuiet(`setAttr -l false ($shapes[$i] + ".renderSmoothLevel")`);
+    catchQuiet(`setAttr ($shapes[$i] + ".useGlobalSmoothDrawType") 1`);
+    catchQuiet(`setAttr ($shapes[$i] + ".displaySubdComps") 0`);
+    catchQuiet(`setAttr ($shapes[$i] + ".useSmoothPreviewForRender") 1`);
+    catchQuiet(`setAttr ($shapes[$i] + ".smoothLevel") 2`);
+    catchQuiet(`setAttr ($shapes[$i] + ".renderSmoothLevel") 2`);
+}
+
+}
+
