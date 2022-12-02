@@ -1,2 +1,3 @@
-import tools.mod_ui
-tools.mod_ui.windowui()
+from tools import mod_ui
+reload(mod_ui)
+mod_ui.windowui()
