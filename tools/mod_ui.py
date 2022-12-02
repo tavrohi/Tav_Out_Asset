@@ -5,8 +5,8 @@ from pymel.all import *
 import os
 import inspect
 import __main__
-import mod_ui_scripts.UVTransfer as uvTrans
-import mod_ui_scripts.Shading_Network_Renamer as shdrename
+import tools.mod_ui_scripts.UVTransfer as uvTrans
+import tools.mod_ui_scripts.Shading_Network_Renamer as shdrename
 import tools.showxml
 # import tools.pub_ui
 
@@ -21,7 +21,7 @@ def windes():
     cmds.text(l="",h=10)
     
     cmds.button(label = "Modeling CheckList", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Assets_Publisher.mel\"; CheckListUi;')")
-    cmds.button(label = "Publishing Tool", width=200, bgc=(0.1,0.1,0.1), c=launchpubui)
+    #cmds.button(label = "Publishing Tool", width=200, bgc=(0.1,0.1,0.1), c=launchpubui)
     
     cmds.rowLayout(nc=4, width=200)
     cmds.button(label = "CP", width=49, bgc=(0.1,0.1,0.1), c="maya.cmds.xform(cpc=1)")
@@ -31,19 +31,19 @@ def windes():
     cmds.setParent('..')
     
     cmds.rowLayout(nc=4, width=200)
-    cmds.button(label = "All Geo", width=49, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"cpa\")"))
-    cmds.button(label = "All Geo", width=49, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"fta\")"))
-    cmds.button(label = "All Geo", width=49, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"dha\")"))
-    cmds.button(label = "All Geo", width=49, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"ndha\")"))
+    cmds.button(label = "All Geo", width=49, bgc=(0.1,0.1,0.1), c=("mod_ui.cpftam(\"cpa\")"))
+    cmds.button(label = "All Geo", width=49, bgc=(0.1,0.1,0.1), c=("mod_ui.cpftam(\"fta\")"))
+    cmds.button(label = "All Geo", width=49, bgc=(0.1,0.1,0.1), c=("mod_ui.cpftam(\"dha\")"))
+    cmds.button(label = "All Geo", width=49, bgc=(0.1,0.1,0.1), c=("mod_ui.cpftam(\"ndha\")"))
     cmds.setParent('..')
     
     cmds.rowLayout(nc=4, width=200)
-    cmds.button(label = "All Grp", width=49, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"cpaGrp\")"))
-    cmds.button(label = "All Grp", width=49, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"ftaGrp\")"))
-    cmds.button(label = "All Grp", width=49, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"dhaGrp\")"))
-    cmds.button(label = "All Grp", width=49, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"ndhaGrp\")"))
+    cmds.button(label = "All Grp", width=49, bgc=(0.1,0.1,0.1), c=("mod_ui.cpftam(\"cpaGrp\")"))
+    cmds.button(label = "All Grp", width=49, bgc=(0.1,0.1,0.1), c=("mod_ui.cpftam(\"ftaGrp\")"))
+    cmds.button(label = "All Grp", width=49, bgc=(0.1,0.1,0.1), c=("mod_ui.cpftam(\"dhaGrp\")"))
+    cmds.button(label = "All Grp", width=49, bgc=(0.1,0.1,0.1), c=("mod_ui.cpftam(\"ndhaGrp\")"))
     cmds.setParent('..')
-    cmds.button(label = "CP,FT,DH,NDH ALL Geo Grp", width=200, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"cpftdhndh\")"))
+    cmds.button(label = "CP,FT,DH,NDH ALL Geo Grp", width=200, bgc=(0.1,0.1,0.1), c=("mod_ui.cpftam(\"cpftdhndh\")"))
     
     cmds.separator()
     
@@ -74,19 +74,19 @@ def windes():
     cmds.rowLayout(nc=3, width=200)
     cmds.text(label="Set CVs \'0\'", w=69, font='tinyBoldLabelFont')
     cmds.button(label = "Selected", w=64, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/xtras.mel\"; scva;')")
-    cmds.button(label = "All Mesh", w=64, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"cvz\")"))
+    cmds.button(label = "All Mesh", w=64, bgc=(0.1,0.1,0.1), c=("mod_ui.cpftam(\"cvz\")"))
     cmds.setParent('..')
     cmds.button(label = "Check Duplicate Mesh", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Duplicate_mesh.mel\"; dupmeshui;')")
     cmds.button(label = "abSymMesh", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/abSymMesh.mel\"; abSymMesh;')")
     cmds.button(label = "Rename", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/RenameScript.mel\"; cometRename;')")
     cmds.button(label = "Duplicate Auto Rename", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Duplicate_Auto_Rename.mel\"; autodupwin;')")
-    cmds.button(label = "UV Transfer", width=200, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"uvtrans\")"))
+    cmds.button(label = "UV Transfer", width=200, bgc=(0.1,0.1,0.1), c=("mod_ui.cpftam(\"uvtrans\")"))
     cmds.setParent('..')
     cmds.setParent('..')
 
     cmds.frameLayout(label='Shader Tools', cll=1, cl=0, lv=1, w=200)
     cmds.columnLayout(w=200, adjustableColumn=1)
-    cmds.button(label = "Rename Shading Network", width=200, bgc=(0.1,0.1,0.1), c=(__name__+".cpftam(\"shdrename\")"))
+    cmds.button(label = "Rename Shading Network", width=200, bgc=(0.1,0.1,0.1), c=("mod_ui.cpftam(\"shdrename\")"))
     cmds.button(label = "FTM", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/FileTextureManager.mel\"; FileTextureManager_2018;')")
     cmds.button(label = "Material List", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Material_List.mel\"; NameSceneUI;')")
     cmds.button(label = "Basic Shader\'s", width=200, bgc=(0.1,0.1,0.1), c="maya.mel.eval('source \"tools/mod_ui_scripts/Basic_shader.mel\"; defaultshaderwin;')")
@@ -113,8 +113,7 @@ def windowui():
     except:
         pass
         
-    print(__name__)
-    cmds.workspaceControl('modwin', tabToControl=('AttributeEditor', -1), li=1, r=1, mw=250 , label=WINDOW_SIDE_TITLE, uiScript=(__name__+".windes()"))
+    cmds.workspaceControl('modwin', tabToControl=('AttributeEditor', -1), li=1, r=1, mw=250 , label=WINDOW_SIDE_TITLE, uiScript=("mod_ui.windes()"))
    
 # def launchpubui(item=None):
 #     pth = tools.showxml.findpath()
