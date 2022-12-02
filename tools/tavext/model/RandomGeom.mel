@@ -1,0 +1,422 @@
+if (`window -exists ms_randomToolsUI`)
+	deleteUI ms_randomToolsUI;
+
+window 
+	-wh 200 550 
+	-t "ms_randomTools 1.0"  
+	-mxb off
+	-mnb off
+	-resizeToFitChildren on
+	-sizeable on
+	ms_randomToolsUI;
+
+	string $msabout = "print \"ms_randomTools || version 1.0|| attale3@gmail.com\"";	
+menuBarLayout;	
+	menu -label "Help";
+		menuItem -l "Help...";
+		menuItem -divider 1;
+		menuItem -l "About" -c $msabout;
+
+	menu -label "Edit";
+		menuItem -l "Reset UI" -c "ms_resetUI()" ;
+ 
+columnLayout -adj 0 mainCol;
+//---------------------------------------------------------------
+frameLayout 
+	-l "Random Translate" 
+	-collapsable 0
+	-marginHeight  5
+	-w 270
+	randomTranslateFrame;
+setParent ..;
+columnLayout -adj 1 ;
+floatSliderGrp -label "Mult Range" -field true -cc "ms_Translate()"
+    -minValue 0.0 -maxValue 50.0
+    -fieldMinValue 1.0 -fieldMaxValue 1000.0
+    -value 1
+	-cw 1 65
+	-cw 2 50
+	-cw 3 100
+	-cw 4 50
+    multTransRangeSlider;
+setParent ..;
+columnLayout -adj 0 ;
+floatFieldGrp 
+	-numberOfFields 3 
+	-label "  Min" 
+	-cw 1 65
+	-cw 2 50
+	-cw 3 50
+	-cw 4 50
+	-columnAlign4 "right" "left" "left" "left"
+	-value1 0 
+	-value2 0 
+	-value3 0
+	minTranslateFloat;
+setParent ..;
+rowLayout -numberOfColumns 2
+    -adj 1
+    -columnWidth 1 50
+    -columnWidth 2 50
+    -columnAlign1 "right"
+    TCol;
+floatFieldGrp 
+	-numberOfFields 3 
+	-label "  Max" 
+	-cw 1 65
+	-cw 2 50
+	-cw 3 50
+	-cw 4 50
+	-columnAlign4 "right" "left" "left" "left"
+	-value1 0 
+	-value2 0 
+	-value3 0
+	maxTranslateFloat;
+button -l "Rand" -al "right" -w 46 -p maxTranslateFloat -c "ms_Translate()" translateButton;
+setParent ..;
+//---------------------------------------------------------------
+columnLayout -adj 0 ;
+frameLayout 
+	-l "Random Rotate" 
+	-collapsable 0
+	-marginHeight  5
+	-w 270
+	randomRotateFrame;
+setParent ..;
+
+columnLayout -adj 0 ;
+floatSliderGrp -label "Mult Range" -field true -cc "ms_Rotate()"
+    -minValue 0.0 -maxValue 360.0
+    -fieldMinValue 0.0 -fieldMaxValue 1000.0
+    -value 1
+	-cw 1 65
+	-cw 2 50
+	-cw 3 100
+	-cw 4 50
+    multRotateRangeSlider;	
+setParent ..; 
+columnLayout -adj 0 ;
+floatFieldGrp 
+	//-e
+	-numberOfFields 3 
+	-label "  Min" 
+	-cw 1 65
+	-cw 2 50
+	-cw 3 50
+	-cw 4 50
+	-columnAlign4 "right" "left" "left" "left"
+	-value1 0 
+	-value2 0 
+	-value3 0
+	minRotateFloat;
+setParent ..;
+
+rowLayout -numberOfColumns 2
+    -adj 1
+    -columnWidth 1 50
+    -columnWidth 2 50
+    -columnAlign1 "right"
+    RCol;
+floatFieldGrp 
+	//-e
+	-numberOfFields 3 
+	-label "  Max" 
+	-cw 1 65
+	-cw 2 50
+	-cw 3 50
+	-cw 4 50
+	-columnAlign4 "right" "left" "left" "left"
+	-value1 0 
+	-value2 0 
+	-value3 0
+	maxRotateFloat;
+button -l "Rand" -al "right" -w 46 -p maxRotateFloat -c "ms_Rotate()" rotateButton;
+setParent ..;
+//---------------------------------------------------------------
+columnLayout -adj 0 ;
+frameLayout 
+	-l "Random Scale" 
+	-collapsable 0
+	-marginHeight  5
+	-w 270
+	randomScaleFrame;
+setParent ..;
+columnLayout -adj 1 ;
+checkBoxGrp
+    -numberOfCheckBoxes 1 -label "Uniform Scale" 
+    -v1 off 
+    -columnAlign4 "center" "left" "left" "left"
+	-cw 1 70
+    UniformCheck;
+setParent ..;
+columnLayout -adj 1 ;
+floatSliderGrp -label "Mult Range" -field true -cc "ms_Scale()"
+    -minValue 1.0 -maxValue 50.0
+    -fieldMinValue 0.0 -fieldMaxValue 1000.0
+    -value 1
+	-cw 1 65
+	-cw 2 50
+	-cw 3 100
+	-cw 4 50
+	-columnAlign4 "right" "left" "left" "left"
+    multScaleRangeSlider;	
+setParent ..;
+
+columnLayout -adj 1 ;
+floatFieldGrp 
+	-numberOfFields 3 
+	-label "  Min" 
+	-cw 1 65
+	-cw 2 50
+	-cw 3 50
+	-cw 4 50
+	-columnAlign4 "right" "left" "left" "left"
+	-value1 1
+	-value2 1 
+	-value3 1
+	minScaleFloat;
+setParent ..;
+
+rowLayout -numberOfColumns 2
+    -adj 1
+    -columnWidth 1 50
+    -columnWidth 2 50
+    -columnAlign1 "right"
+    SCol;
+floatFieldGrp 
+	-numberOfFields 3 
+	-label "  Max" 
+	-cw 1 65
+	-cw 2 50
+	-cw 3 50
+	-cw 4 50
+	-columnAlign4 "right" "left" "left" "left"
+	-value1 1
+	-value2 1
+	-value3 1
+	maxScaleFloat;
+
+
+button -l "Rand"  -al "right" -w 46 -p maxScaleFloat -c "ms_Scale()" scaleButton;
+
+setParent ..;
+//---------------------------------------------------------------
+columnLayout -adj 1 ;
+frameLayout 
+	-l "Reset Objects Transformations To Default" 
+	-collapsable 0
+	-marginHeight  5
+	-w 270
+	resetAllTransformations;
+setParent ..;
+rowLayout -numberOfColumns 3
+    -adj 1
+    -columnWidth 1 50
+    -columnWidth 2 50
+    -columnAlign1 "right"
+    resetCol;
+separator -height 10 -style "in";
+button -l "Reset Transformations" -w 160 -p resetCol -c "ms_resetAllTransformations()" ResetButton;
+setParent mainCol;
+//---------------------------------------------------------------
+showWindow ms_randomToolsUI;
+
+//=============================================================
+//=============================================================
+global proc ms_Translate()
+{
+//get UI info	
+	float $minX = `floatFieldGrp -q -value1 minTranslateFloat`;
+	float $minY = `floatFieldGrp -q -value2 minTranslateFloat`;
+	float $minZ = `floatFieldGrp -q -value3 minTranslateFloat`;
+	float $maxX = `floatFieldGrp -q -value1 maxTranslateFloat`;
+	float $maxY = `floatFieldGrp -q -value2 maxTranslateFloat`;
+	float $maxZ = `floatFieldGrp -q -value3 maxTranslateFloat`;
+	float $transRange = `floatSliderGrp -q -value multTransRangeSlider`;
+	
+
+	$geoOfsset = `ls -sl -exactType transform`;
+	
+	for ($eachSel in $geoOfsset)
+	{	//random value generation
+		$xTrans = rand($minX, $maxX);
+		$yTrans = rand($minY, $maxY);
+		$zTrans = rand($minZ, $maxZ);
+				
+		//apply random value to Selected attribute
+		$attr = $eachSel + ".translateX";
+		setAttr $attr ($xTrans*$transRange);
+	
+		$attr = $eachSel + ".translateY";
+		setAttr $attr ($yTrans*$transRange);
+	
+		$attr = $eachSel + ".translateZ";
+		setAttr $attr ($zTrans*$transRange);
+	}
+}
+
+//=============================================================
+//=============================================================
+global proc ms_Rotate()
+{
+//get UI info	
+	float $minX = `floatFieldGrp -q -value1 minRotateFloat`;
+	float $minY = `floatFieldGrp -q -value2 minRotateFloat`;
+	float $minZ = `floatFieldGrp -q -value3 minRotateFloat`;
+	float $maxX = `floatFieldGrp -q -value1 maxRotateFloat`;
+	float $maxY = `floatFieldGrp -q -value2 maxRotateFloat`;
+	float $maxZ = `floatFieldGrp -q -value3 maxRotateFloat`;
+	float $rotateRange = `floatSliderGrp -q -value multRotateRangeSlider`;	
+
+	$geoOfsset = `ls -sl -exactType transform`;
+	
+	for ($eachSel in $geoOfsset)
+	{	//random value generation
+		$xRotate = rand($minX, $maxX);
+		$yRotate = rand($minY, $maxY);
+		$zRotate = rand($minZ, $maxZ);
+		
+		//apply random value to Selected attribute
+		$attr = $eachSel + ".rotateX";
+		setAttr $attr ($xRotate*$rotateRange);
+	
+		$attr = $eachSel + ".rotateY";
+		setAttr $attr ($yRotate*$rotateRange);
+	
+		$attr = $eachSel + ".rotateZ";
+		setAttr $attr ($zRotate*$rotateRange);
+	}
+}
+
+//=============================================================
+//=============================================================
+global proc ms_Scale()
+{
+//get UI info	
+	float $minX = `floatFieldGrp -q -value1 minScaleFloat`;
+	float $minY = `floatFieldGrp -q -value2 minScaleFloat`;
+	float $minZ = `floatFieldGrp -q -value3 minScaleFloat`;
+	float $maxX = `floatFieldGrp -q -value1 maxScaleFloat`;
+	float $maxY = `floatFieldGrp -q -value2 maxScaleFloat`;
+	float $maxZ = `floatFieldGrp -q -value3 maxScaleFloat`;
+	float $scaleRange = `floatSliderGrp -q -value multScaleRangeSlider`;
+
+$check = `checkBoxGrp -q -v1 UniformCheck`;
+if ($check == 0){
+	$geoOfsset = `ls -sl -exactType transform`;
+
+	for ($eachSel in $geoOfsset)
+	{	//random value generation
+		$xScale = rand($minX, $maxX);
+		$yScale = rand($minY, $maxY);
+		$zScale = rand($minZ, $maxZ);
+		
+		//apply random value to Selected attribute
+		$attr = $eachSel + ".scaleX";
+		setAttr $attr ($xScale*$scaleRange);
+	
+		$attr = $eachSel + ".scaleY";
+		setAttr $attr ($yScale*$scaleRange);
+	
+		$attr = $eachSel + ".scaleZ";
+		setAttr $attr ($zScale*$scaleRange);
+	}
+}
+else{
+    
+        string $lsatr[] = `ls -sl -fl`;
+        for ($each in $lsatr){
+        //random value generation
+		$xxScale = rand($minX, $maxX);
+		$yyScale = rand($minY, $maxY);
+		$zzScale = rand($minZ, $maxZ);
+		
+		//apply random value to Selected attribute
+		$attr = $each + ".scaleX";
+		setAttr $attr ($xxScale*$scaleRange);
+	
+		$attr = $each + ".scaleY";
+		setAttr $attr ($xxScale*$scaleRange);
+	
+		$attr = $each + ".scaleZ";
+		setAttr $attr ($xxScale*$scaleRange);
+	}
+}}
+//=============================================================
+// ms_resetUI
+//=============================================================
+
+global proc ms_resetUI()
+	
+{
+floatSliderGrp
+    -e
+    -value 1
+    multTransRangeSlider;
+    
+floatSliderGrp
+    -e
+    -value 1
+    multRotateRangeSlider;
+    
+floatSliderGrp
+    -e
+    -value 1
+    multScaleRangeSlider;
+     
+floatFieldGrp 
+	-e 
+	-value1 0 
+	-value2 0 
+	-value3 0 
+	minTranslateFloat;
+
+floatFieldGrp 
+	-e 
+	-value1 0 
+	-value2 0 
+	-value3 0 
+	maxTranslateFloat;
+
+floatFieldGrp 
+	-e 
+	-value1 0 
+	-value2 0 
+	-value3 0 
+	minRotateFloat;
+
+floatFieldGrp 
+	-e 
+	-value1 0 
+	-value2 0 
+	-value3 0 
+	maxRotateFloat;
+	
+checkBoxGrp
+    -e
+    -v1 0
+    UniformCheck;
+    
+floatFieldGrp 
+	-e 
+	-value1 1
+	-value2 1
+	-value3 1
+	minScaleFloat;
+
+floatFieldGrp 
+	-e 
+	-value1 1 
+	-value2 1
+	-value3 1
+	maxScaleFloat;
+	
+}
+//====================================================================
+
+global proc ms_resetAllTransformations()
+{
+
+	string $resetAll = `ResetTransformations`;
+
+}
